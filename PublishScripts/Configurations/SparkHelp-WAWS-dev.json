@@ -1,0 +1,21 @@
+{
+    "environmentSettings": {
+        "webSite": {
+            "name": "SparkHelp",
+            "location": "East US"
+        },
+        "databases": [
+            {
+                "connectionStringName": "DefaultConnection",
+                "databaseName": "SparkHelp_db",
+                "serverName": "ad49y6wss0",
+                "user": "jdmdev",
+                "password": "",
+                "edition": "",
+                "size": "",
+                "collation": "",
+                "location": "East US"
+            }
+        ]
+    }
+}
