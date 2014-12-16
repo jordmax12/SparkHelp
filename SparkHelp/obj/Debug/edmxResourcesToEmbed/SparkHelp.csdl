@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SparkHelp_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CheckedAnswer">
+    <Key>
+      <PropertyRef Name="AnswerID" />
+    </Key>
+    <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuestionID" Type="Int32" Nullable="false" />
+    <Property Name="AnswerText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="AnswerVote" Type="Int32" />
+    <NavigationProperty Name="Question" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="CheckedAnswers" ToRole="Questions" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="QuestionID" />
+    </Key>
+    <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuestionTitle" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionLink" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionVote" Type="Int32" />
+    <NavigationProperty Name="CheckedAnswers" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="Questions" ToRole="CheckedAnswers" />
+    <NavigationProperty Name="UncheckedAnswers" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="Questions" ToRole="UncheckedAnswers" />
+  </EntityType>
+  <EntityType Name="UncheckedAnswer">
+    <Key>
+      <PropertyRef Name="AnswerID" />
+    </Key>
+    <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuestionID" Type="Int32" Nullable="false" />
+    <Property Name="AnswerText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="AnswerVote" Type="Int32" />
+    <NavigationProperty Name="Question" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="UncheckedAnswers" ToRole="Questions" />
+  </EntityType>
+  <Association Name="FK__CheckedAn__Quest__34C8D9D1">
+    <End Role="Questions" Type="Self.Question" Multiplicity="1" />
+    <End Role="CheckedAnswers" Type="Self.CheckedAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Questions">
+        <PropertyRef Name="QuestionID" />
+      </Principal>
+      <Dependent Role="CheckedAnswers">
+        <PropertyRef Name="QuestionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Unchecked__Quest__37A5467C">
+    <End Role="Questions" Type="Self.Question" Multiplicity="1" />
+    <End Role="UncheckedAnswers" Type="Self.UncheckedAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Questions">
+        <PropertyRef Name="QuestionID" />
+      </Principal>
+      <Dependent Role="UncheckedAnswers">
+        <PropertyRef Name="QuestionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SparkHelp_dbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CheckedAnswers" EntityType="Self.CheckedAnswer" />
+    <EntitySet Name="Questions" EntityType="Self.Question" />
+    <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswer" />
+    <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
+      <End Role="Questions" EntitySet="Questions" />
+      <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Unchecked__Quest__37A5467C" Association="Self.FK__Unchecked__Quest__37A5467C">
+      <End Role="Questions" EntitySet="Questions" />
+      <End Role="UncheckedAnswers" EntitySet="UncheckedAnswers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

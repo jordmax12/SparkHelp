@@ -53,3 +53,6 @@ C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\Microsoft.Owin.Security
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\obj\Debug\SparkHelp.csprojResolveAssemblyReference.cache
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\obj\Debug\SparkHelp.dll
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\obj\Debug\SparkHelp.pdb
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.dll
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.pdb
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.xml
