@@ -77,48 +77,54 @@ namespace SparkHelp.Controllers
                     {
                         Question question = new Question();
                         HtmlNode rows = node.SelectSingleNode(".//a");
+
+                        string sub_url = "http://stackoverflow.com" + rows.Attributes["href"].Value;
+                        //Console.WriteLine(rows.Attributes["href"].Value);
                         question.QuestionLink = rows.Attributes["href"].Value;
                         question.QuestionTitle = rows.InnerHtml.Trim();
                         question.QuestionQuery = resultQuery;
-                        string sub_url = "http://stackoverflow.com" + rows.Attributes["href"].Value;
-                        //Console.WriteLine(rows.Attributes["href"].Value);
-
                         HtmlWeb sub_web = new HtmlWeb();
                         HtmlDocument sub_doc = sub_web.Load(sub_url);
-                        if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]") != null)
+                        if (rows.InnerHtml.Trim().StartsWith("Q"))
                         {
-                            foreach (HtmlNode sub_node in sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]"))
+                            if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]") != null)
                             {
-                                if (sub_node == null)
-                                    Console.WriteLine("debug");
-                                else
-                                {
-                                    Console.WriteLine(rows.InnerHtml);
-                                    foreach (HtmlNode sub_node2 in sub_node.SelectNodes(".//div [@class=\"post-text\"]"))
-                                    {
-                                        if (sub_node2 == null)
-                                            Console.WriteLine("debug");
-                                        else
-                                        {
-                                            foreach (HtmlNode sub_node3 in sub_node2.SelectNodes(".//p"))
-                                            {
-                                                if (sub_node3 == null)
-                                                    Console.WriteLine("debug");
-                                                else
-                                                {
-                                                    
-                                                    Console.WriteLine(sub_node3.InnerHtml);
-                                                }
 
+                                foreach (HtmlNode sub_node in sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]"))
+                                {
+                                    if (sub_node == null)
+                                        Console.WriteLine("debug");
+                                    else
+                                    {
+                                        
+                                        foreach (HtmlNode sub_node2 in sub_node.SelectNodes(".//div [@class=\"post-text\"]"))
+                                        {
+                                            if (sub_node2 == null)
+                                                Console.WriteLine("debug");
+                                            else
+                                            {
+                                                foreach (HtmlNode sub_node3 in sub_node2.SelectNodes(".//p"))
+                                                {
+                                                    if (sub_node3 == null)
+                                                        Console.WriteLine("debug");
+                                                    else
+                                                    {
+
+                                                        
+                                                    }
+
+                                                }
                                             }
                                         }
                                     }
+
+                                    //sub_rows.SelectNodes(".//p");
+
                                 }
-
-                                //sub_rows.SelectNodes(".//p");
-
                             }
                         }
+
+
 
                         if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
                         {
