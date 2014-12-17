@@ -147,54 +147,58 @@ namespace SparkHelp.Controllers
                         }
                         //db.Questions.Add(question);
                         //db.SaveChanges();
-                        string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
-                        using (SqlConnection conn = new SqlConnection(connString))
+                        if (rows.InnerHtml.Trim().StartsWith("Q"))
                         {
-                            conn.Open();
-
-                            if (conn.State != System.Data.ConnectionState.Open)
+                            string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+                            using (SqlConnection conn = new SqlConnection(connString))
                             {
-                                Console.WriteLine("Error in opening database connection!");
-                                return;
-                            }
+                                conn.Open();
 
-                            using (SqlCommand cmd = new SqlCommand("INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionText, QuestionQuery) VALUES (@title, @link, @text, @query)", conn))
-                            {
-                                SqlParameter qTitle = new SqlParameter();
-                                qTitle.ParameterName = "@title";
-                                string strip = question.QuestionTitle;
-                                strip = strip.Substring(3);
-                                question.QuestionTitle = strip;
-                                qTitle.Value = question.QuestionTitle;
-
-                                SqlParameter qLink = new SqlParameter();
-                                qLink.ParameterName = "@link";
-                                qLink.Value = question.QuestionLink;
-
-                                SqlParameter qText = new SqlParameter();
-                                qText.ParameterName = "@text";
-                                string trunc = question.QuestionText;
-
-                                if (trunc.Length > 1000)
+                                if (conn.State != System.Data.ConnectionState.Open)
                                 {
-                                    trunc = trunc.Substring(0, 1000);
+                                    Console.WriteLine("Error in opening database connection!");
+                                    return;
                                 }
 
-                                question.QuestionText = trunc;
-                                qText.Value = question.QuestionText;
+                                using (SqlCommand cmd = new SqlCommand("INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionText, QuestionQuery) VALUES (@title, @link, @text, @query)", conn))
+                                {
+                                    SqlParameter qTitle = new SqlParameter();
+                                    qTitle.ParameterName = "@title";
+                                    string strip = question.QuestionTitle;
+                                    strip = strip.Substring(3);
+                                    question.QuestionTitle = strip;
+                                    qTitle.Value = question.QuestionTitle;
 
-                                SqlParameter qQuery = new SqlParameter();
-                                qQuery.ParameterName = "@query";
-                                qQuery.Value = question.QuestionQuery;
+                                    SqlParameter qLink = new SqlParameter();
+                                    qLink.ParameterName = "@link";
+                                    qLink.Value = question.QuestionLink;
 
-                                cmd.Parameters.Add(qTitle);
-                                cmd.Parameters.Add(qLink);
-                                cmd.Parameters.Add(qText);
-                                cmd.Parameters.Add(qQuery);
-                                cmd.ExecuteNonQuery();
-                                conn.Close();
+                                    SqlParameter qText = new SqlParameter();
+                                    qText.ParameterName = "@text";
+                                    string trunc = question.QuestionText;
+
+                                    if (trunc.Length > 1000)
+                                    {
+                                        trunc = trunc.Substring(0, 1000);
+                                    }
+
+                                    question.QuestionText = trunc;
+                                    qText.Value = question.QuestionText;
+
+                                    SqlParameter qQuery = new SqlParameter();
+                                    qQuery.ParameterName = "@query";
+                                    qQuery.Value = question.QuestionQuery;
+
+                                    cmd.Parameters.Add(qTitle);
+                                    cmd.Parameters.Add(qLink);
+                                    cmd.Parameters.Add(qText);
+                                    cmd.Parameters.Add(qQuery);
+                                    cmd.ExecuteNonQuery();
+                                    conn.Close();
+                                }
                             }
                         }
+                       
                     }
                 }
             }
