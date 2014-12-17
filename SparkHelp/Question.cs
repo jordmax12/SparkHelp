@@ -25,6 +25,7 @@ namespace SparkHelp
         public string QuestionLink { get; set; }
         public string QuestionText { get; set; }
         public Nullable<int> QuestionVote { get; set; }
+        public string QuestionQuery { get; set; }
     
         public virtual ICollection<CheckedAnswer> CheckedAnswers { get; set; }
         public virtual ICollection<UncheckedAnswer> UncheckedAnswers { get; set; }

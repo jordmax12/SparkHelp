@@ -10,8 +10,16 @@ namespace SparkHelp.Controllers
 {
     public class HomeController : Controller
     {
-        SparkHelp_dbEntities db = new SparkHelp_dbEntities();
 
+        public string Truncate(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value)) 
+                return value;
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
+
+        SparkHelp_dbEntities db = new SparkHelp_dbEntities();
+        string resultQuery = "";
         public ActionResult Index(string queried)
         {
             Console.WriteLine(queried);
@@ -23,7 +31,7 @@ namespace SparkHelp.Controllers
                 char[] delimChars = { ' ' };
                 string[] newQuery = query.Split(delimChars);
 
-                string resultQuery = "";
+                
                 int i = 0;
                 foreach (string s in newQuery)
                 {
@@ -76,6 +84,7 @@ namespace SparkHelp.Controllers
                         HtmlNode rows = node.SelectSingleNode(".//a");
                         question.QuestionLink = rows.Attributes["href"].Value;
                         question.QuestionTitle = rows.InnerHtml.Trim();
+                        question.QuestionQuery = resultQuery;
                         string sub_url = "http://stackoverflow.com" + rows.Attributes["href"].Value;
                         //Console.WriteLine(rows.Attributes["href"].Value);
 
@@ -115,6 +124,26 @@ namespace SparkHelp.Controllers
 
                             }
                         }
+
+                        if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
+                        {
+                            foreach (HtmlNode sub_node in sub_doc.DocumentNode.SelectNodes(".//div [@class=\"question\"]"))
+                            {
+                                foreach (HtmlNode sub_node2 in sub_node.SelectNodes(".//div [@class=\"post-text\"]"))
+                                {
+                                    foreach (HtmlNode sub_node3 in sub_node2.SelectNodes(".//p"))
+                                    {
+                                        if (question.QuestionText == null)
+                                            question.QuestionText = sub_node3.InnerHtml;
+                                        else
+                                            question.QuestionText += " " + sub_node3.InnerHtml;
+                                    }
+                                }
+
+
+                            }
+                            Console.WriteLine(  "s");
+                        }
                         //db.Questions.Add(question);
                         //db.SaveChanges();
                         string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
@@ -128,19 +157,39 @@ namespace SparkHelp.Controllers
                                 return;
                             }
 
-                            using (SqlCommand cmd = new SqlCommand("INSERT INTO Questions (QuestionTitle, QuestionLink) VALUES (@title, @link)", conn))
+                            using (SqlCommand cmd = new SqlCommand("INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionText, QuestionQuery) VALUES (@title, @link, @text, @query)", conn))
                             {
                                 SqlParameter qTitle = new SqlParameter();
                                 qTitle.ParameterName = "@title";
+                                string strip = question.QuestionTitle;
+                                strip = strip.Substring(3);
+                                question.QuestionTitle = strip;
                                 qTitle.Value = question.QuestionTitle;
 
                                 SqlParameter qLink = new SqlParameter();
                                 qLink.ParameterName = "@link";
                                 qLink.Value = question.QuestionLink;
 
+                                SqlParameter qText = new SqlParameter();
+                                qText.ParameterName = "@text";
+                                string trunc = question.QuestionText;
+
+                                if (trunc.Length > 1000)
+                                {
+                                    trunc = trunc.Substring(0, 1000);
+                                }
+
+                                question.QuestionText = trunc;
+                                qText.Value = question.QuestionText;
+
+                                SqlParameter qQuery = new SqlParameter();
+                                qQuery.ParameterName = "@query";
+                                qQuery.Value = question.QuestionQuery;
+
                                 cmd.Parameters.Add(qTitle);
                                 cmd.Parameters.Add(qLink);
-
+                                cmd.Parameters.Add(qText);
+                                cmd.Parameters.Add(qQuery);
                                 cmd.ExecuteNonQuery();
                                 conn.Close();
                             }
@@ -157,4 +206,6 @@ namespace SparkHelp.Controllers
             }
         }
     }
+
+
 }
