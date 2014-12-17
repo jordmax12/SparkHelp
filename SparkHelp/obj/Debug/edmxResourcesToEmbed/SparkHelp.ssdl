@@ -14,10 +14,11 @@
       <PropertyRef Name="QuestionID" />
     </Key>
     <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="QuestionTitle" Type="char" MaxLength="25" />
-    <Property Name="QuestionLink" Type="char" MaxLength="25" />
-    <Property Name="QuestionText" Type="char" MaxLength="25" />
+    <Property Name="QuestionTitle" Type="char" MaxLength="250" />
+    <Property Name="QuestionLink" Type="char" MaxLength="250" />
+    <Property Name="QuestionText" Type="char" MaxLength="2001" />
     <Property Name="QuestionVote" Type="int" />
+    <Property Name="QuestionQuery" Type="char" MaxLength="250" Nullable="false" />
   </EntityType>
   <EntityType Name="UncheckedAnswers">
     <Key>

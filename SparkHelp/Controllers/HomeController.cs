@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,14 +11,6 @@ namespace SparkHelp.Controllers
 {
     public class HomeController : Controller
     {
-
-        public string Truncate(string value, int maxLength)
-        {
-            if (string.IsNullOrEmpty(value)) 
-                return value;
-            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
-        }
-
         SparkHelp_dbEntities db = new SparkHelp_dbEntities();
         string resultQuery = "";
         public ActionResult Index(string queried)
@@ -43,10 +36,12 @@ namespace SparkHelp.Controllers
                 }
 
                 GetLinks(resultQuery);
-                return View();
+                var grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                List<Question> list = grabQuestions.ToList();
+                return View(grabQuestions.ToList());
             }
-
-            return View();
+            List<Question> emptyList = new List<Question>();
+            return View(emptyList);
         }
 
         public ActionResult About()

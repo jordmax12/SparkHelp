@@ -14,6 +14,7 @@
     <EntitySetMapping Name="Questions">
       <EntityTypeMapping TypeName="SparkHelp_dbModel.Question">
         <MappingFragment StoreEntitySet="Questions">
+          <ScalarProperty Name="QuestionQuery" ColumnName="QuestionQuery" />
           <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
           <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
           <ScalarProperty Name="QuestionLink" ColumnName="QuestionLink" />

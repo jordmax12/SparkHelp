@@ -15,12 +15,13 @@
       <PropertyRef Name="QuestionID" />
     </Key>
     <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="QuestionTitle" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
-    <Property Name="QuestionLink" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
-    <Property Name="QuestionText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionTitle" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionLink" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
+    <Property Name="QuestionText" Type="String" MaxLength="2001" FixedLength="true" Unicode="false" />
     <Property Name="QuestionVote" Type="Int32" />
     <NavigationProperty Name="CheckedAnswers" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="Questions" ToRole="CheckedAnswers" />
     <NavigationProperty Name="UncheckedAnswers" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="Questions" ToRole="UncheckedAnswers" />
+    <Property Name="QuestionQuery" Type="String" Nullable="false" MaxLength="250" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="UncheckedAnswer">
     <Key>

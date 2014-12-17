@@ -1,4 +1,4 @@
-﻿
+﻿@model IList<Question>
 @{
     ViewBag.Title = "Home Page";
 }
@@ -12,18 +12,23 @@
         <br/>
         <br/>
         <!-- Search Navbar - START -->
-        <div class="col-md-4 col-md-offset-4">
+
+       <div class="col-md-4 col-md-offset-4">
             <form class="navbar-form" role="search">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search" name="q">
                     <div class="input-group-btn">
-                        <a href="@Url.Action("Index", "Home", new { queried = "true" })"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
-                    </div>
-                </div>
-            </form>
-            
-        </div>
-
+                        <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
+                   </div>
+               </div>
+           </form>
+       </div>
+        
+        @foreach (var question in Model)
+        {
+            string link = "http://www.stackoverflow.com" + @question.QuestionLink;
+            <a href=@link><h2>@question.QuestionTitle</h2></a>
+        }
         <!-- Search Navbar - END -->
 
     </div>
