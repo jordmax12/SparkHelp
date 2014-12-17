@@ -25,17 +25,18 @@
                </div>
            </form>
        </div>
-        
+        <br />
+        <br />
         @foreach (var question in Model)
         {
             string link = "http://www.stackoverflow.com" + @question.QuestionLink;
 
             <tr>
                 <td class="col-sm-6 col-md-4">
-                    <div class="media">
-                                <a class="pull-left" href="@link" style="width: auto; height: 72px;">
-                                    <h4 class="media-heading">@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
-                                </a>
+                    <div class="media" style="width: 150px; float: left;">
+                        <a class=" pull-left" href="@link" style="width: auto; height: 72px;">
+                            <h4 class="media-heading">@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
+                        </a>
                     </div>
                 </td>
             </tr>
