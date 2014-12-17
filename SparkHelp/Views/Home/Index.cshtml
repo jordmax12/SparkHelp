@@ -1,4 +1,6 @@
-﻿@model IList<Question>
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<Question>
 @{
     ViewBag.Title = "Home Page";
 }
@@ -27,8 +29,17 @@
         @foreach (var question in Model)
         {
             string link = "http://www.stackoverflow.com" + @question.QuestionLink;
-            <a href=@link><h2>@question.QuestionTitle</h2></a>
+
+            <tr>
+                <td class="col-sm-6 col-md-4">
+                    <div class="media">
+                                <a class="pull-left" href="@link" style="width: auto; height: 72px;">
+                                    <h4 class="media-heading">@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
+                                </a>
+                    </div>
+                </td>
+            </tr>
         }
         <!-- Search Navbar - END -->
 
-    </div>
+</div>

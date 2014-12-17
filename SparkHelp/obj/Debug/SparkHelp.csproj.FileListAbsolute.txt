@@ -56,3 +56,7 @@ C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\obj\Debug\SparkHelp.pdb
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.dll
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.pdb
 C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\HtmlAgilityPack.xml
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\PagedList.dll
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\PagedList.Mvc.dll
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\PagedList.xml
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\PagedList.Mvc.xml

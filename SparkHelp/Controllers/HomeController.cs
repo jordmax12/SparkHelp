@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using HtmlAgilityPack;
+using PagedList;
 
 namespace SparkHelp.Controllers
 {
@@ -13,7 +14,7 @@ namespace SparkHelp.Controllers
     {
         SparkHelp_dbEntities db = new SparkHelp_dbEntities();
         string resultQuery = "";
-        public ActionResult Index(string queried)
+        public ActionResult Index(string queried, int? page)
         {
             Console.WriteLine(queried);
             if (Request.Params["q"] != null)
@@ -38,10 +39,10 @@ namespace SparkHelp.Controllers
                 GetLinks(resultQuery);
                 var grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
                 List<Question> list = grabQuestions.ToList();
-                return View(grabQuestions.ToList());
+                return View(grabQuestions.ToList().ToPagedList(page ?? 1, 6));
             }
             List<Question> emptyList = new List<Question>();
-            return View(emptyList);
+            return View(emptyList.ToPagedList(page ?? 1, 6));
         }
 
         public ActionResult About()
