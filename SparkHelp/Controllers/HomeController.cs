@@ -36,10 +36,14 @@ namespace SparkHelp.Controllers
                     i++;
                 }
 
-                GetLinks(resultQuery);
+
                 var grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                var count = grabQuestions.ToList().Count;
+                if(count == 0)
+                    GetLinks(resultQuery);
+                
                 List<Question> list = grabQuestions.ToList();
-                return View(grabQuestions.ToList().ToPagedList(page ?? 1, 6));
+                return View(grabQuestions.ToList().ToPagedList(page ?? 1, 15));
             }
             List<Question> emptyList = new List<Question>();
             return View(emptyList.ToPagedList(page ?? 1, 6));

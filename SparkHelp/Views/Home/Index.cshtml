@@ -27,9 +27,10 @@
        </div>
         <br />
         <br/>
-        <table style="width:100%" border="1px" padding="0px">
-            <h2 class="media-heading">Stack Overflow</h2>
-
+        <table style="width: 100%;" border="1px" padding="0px">
+            <div class="text-center">
+                <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
+            </div>
             @foreach (var question in Model)
             {
                 string link = "http://www.stackoverflow.com" + @question.QuestionLink;
