@@ -19,7 +19,7 @@ namespace SparkHelp.Controllers
             Console.WriteLine(queried);
             if (Request.Params["q"] != null)
             {
-                string query = Request.Params["q"].ToString();
+                string query = Request.Params["q"];
 
 
                 char[] delimChars = { ' ' };
@@ -118,9 +118,6 @@ namespace SparkHelp.Controllers
                                             }
                                         }
                                     }
-
-                                    //sub_rows.SelectNodes(".//p");
-
                                 }
                             }
                         }
@@ -146,8 +143,7 @@ namespace SparkHelp.Controllers
                             }
                             Console.WriteLine(  "s");
                         }
-                        //db.Questions.Add(question);
-                        //db.SaveChanges();
+
                         if (rows.InnerHtml.Trim().StartsWith("Q"))
                         {
                             string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;

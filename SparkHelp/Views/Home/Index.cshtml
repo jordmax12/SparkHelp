@@ -26,21 +26,22 @@
            </form>
        </div>
         <br />
-        <br />
-        @foreach (var question in Model)
-        {
-            string link = "http://www.stackoverflow.com" + @question.QuestionLink;
+        <br/>
+        <table style="width:100%" border="1px" padding="0px">
+            <h2 class="media-heading">Stack Overflow</h2>
 
-            <tr>
-                <td class="col-sm-6 col-md-4">
-                    <div class="media" style="width: 150px; float: left;">
-                        <a class=" pull-left" href="@link" style="width: auto; height: 72px;">
-                            <h4 class="media-heading">@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
-                        </a>
-                    </div>
+            @foreach (var question in Model)
+            {
+                string link = "http://www.stackoverflow.com" + @question.QuestionLink;
+
+                <td>
+                    <a href="@link" style="width: auto; height: 72px;">
+                        <h4>@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
+                    </a>
                 </td>
-            </tr>
-        }
+
+            }
+        </table>
         <!-- Search Navbar - END -->
 
 </div>
