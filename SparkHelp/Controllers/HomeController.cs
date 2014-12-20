@@ -99,24 +99,53 @@ namespace SparkHelp.Controllers
 
                 //var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
                 //var msdn_count = grabMSDN.ToList().Count;
-
+                List<Question> finalQuestions = new List<Question>();
+                List<MSDN_table> finalMSDN = new List<MSDN_table>();
+                string prevMSDNString = "";
+                string prevSOstring = "";
                 if (so_count == 0)
                 {
                     GetStackData(resultQuery);
-                    grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+
+                
                 }
 
                 if (msdn_count == 0)
                 {
                     GetMSDNData(resultQuery);
-                    grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
+
+                
                 }
 
+                grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                foreach (var item in grabQuestions)
+                {
+                    if (item.QuestionTitle.Trim() != prevSOstring)
+                        finalQuestions.Add(item);
+
+                    prevSOstring = item.QuestionTitle.Trim();
+                }
+
+
+                grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
+                foreach (var item in grabMSDN)
+                {
+                    if (item.QueryTitle != prevMSDNString)
+                        finalMSDN.Add(item);
+                    else
+                        finalMSDN.Remove(item);
+                     
+
+                    prevMSDNString = item.QueryTitle;
+                }
+                List<ResultsViewModel> returnGrabbedList = new List<ResultsViewModel>();
                 var grab_all =
-                 from m in grabMSDN
-                 join q in grabQuestions on m.QuerySearch equals q.QuestionQuery
-                 where m.QuerySearch == resultQuery
+                 from m in finalMSDN
+                 join q in finalQuestions on m.QuerySearch.Trim() equals q.QuestionQuery.Trim()
                  select new ResultsViewModel { question = q, msdn = m };
+
+
+
                 return View(grab_all.ToList().ToPagedList(page ?? 1, 8));
             }
             List<ResultsViewModel> emptyList = new List<ResultsViewModel>();
