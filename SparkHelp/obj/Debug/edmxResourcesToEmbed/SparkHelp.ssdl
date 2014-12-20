@@ -9,6 +9,17 @@
     <Property Name="AnswerText" Type="char" MaxLength="25" />
     <Property Name="AnswerVote" Type="int" />
   </EntityType>
+  <EntityType Name="MSDN_table">
+    <Key>
+      <PropertyRef Name="QueryID" />
+    </Key>
+    <Property Name="QueryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QueryDescription" Type="nvarchar" MaxLength="4000" />
+    <Property Name="QuerySearch" Type="nvarchar" MaxLength="75" />
+    <Property Name="QuestionID" Type="int" />
+    <Property Name="QueryTitle" Type="nvarchar" MaxLength="75" />
+    <Property Name="QueryURL" Type="nvarchar" MaxLength="75" />
+  </EntityType>
   <EntityType Name="Questions">
     <Key>
       <PropertyRef Name="QuestionID" />
@@ -41,6 +52,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__MSDN_tabl__Quest__4F7CD00D">
+    <End Role="Questions" Type="Self.Questions" Multiplicity="0..1" />
+    <End Role="MSDN_table" Type="Self.MSDN_table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Questions">
+        <PropertyRef Name="QuestionID" />
+      </Principal>
+      <Dependent Role="MSDN_table">
+        <PropertyRef Name="QuestionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK__Unchecked__Quest__37A5467C">
     <End Role="Questions" Type="Self.Questions" Multiplicity="1" />
     <End Role="UncheckedAnswers" Type="Self.UncheckedAnswers" Multiplicity="*" />
@@ -55,11 +78,16 @@
   </Association>
   <EntityContainer Name="SparkHelp_dbModelStoreContainer">
     <EntitySet Name="CheckedAnswers" EntityType="Self.CheckedAnswers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MSDN_table" EntityType="Self.MSDN_table" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
       <End Role="Questions" EntitySet="Questions" />
       <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D" Association="Self.FK__MSDN_tabl__Quest__4F7CD00D">
+      <End Role="Questions" EntitySet="Questions" />
+      <End Role="MSDN_table" EntitySet="MSDN_table" />
     </AssociationSet>
     <AssociationSet Name="FK__Unchecked__Quest__37A5467C" Association="Self.FK__Unchecked__Quest__37A5467C">
       <End Role="Questions" EntitySet="Questions" />

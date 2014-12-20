@@ -18,6 +18,7 @@ namespace SparkHelp
         {
             this.CheckedAnswers = new HashSet<CheckedAnswer>();
             this.UncheckedAnswers = new HashSet<UncheckedAnswer>();
+            this.MSDN_table = new HashSet<MSDN_table>();
         }
     
         public int QuestionID { get; set; }
@@ -29,5 +30,6 @@ namespace SparkHelp
     
         public virtual ICollection<CheckedAnswer> CheckedAnswers { get; set; }
         public virtual ICollection<UncheckedAnswer> UncheckedAnswers { get; set; }
+        public virtual ICollection<MSDN_table> MSDN_table { get; set; }
     }
 }

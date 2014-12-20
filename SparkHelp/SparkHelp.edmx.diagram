@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="SparkHelp_dbModel.UncheckedAnswer" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D1" ManuallyRouted="false" />
         <AssociationConnector Association="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SparkHelp_dbModel.MSDN_table" Width="1.5" PointX="3" PointY="6.5" />
+        <AssociationConnector Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

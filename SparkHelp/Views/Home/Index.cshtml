@@ -1,48 +1,65 @@
 ﻿@using PagedList.Mvc;
 @using PagedList;
-@model IPagedList<Question>
+@model IPagedList<SparkHelp.ViewModels.ResultsViewModel>
 @{
     ViewBag.Title = "Home Page";
 }
 <link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
-    <div class="container">
+<div class="container">
 
-        <div class="text-center">
-            <h1>Spark Help</h1>
-        </div>
-        <br/>
-        <br/>
-        <!-- Search Navbar - START -->
+    <div class="text-center">
+        <h1>Spark Help</h1>
+    </div>
+    <br/>
+    <br/>
+    <!-- Search Navbar - START -->
 
-       <div class="col-md-4 col-md-offset-4">
-            <form class="navbar-form" role="search">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search" name="q">
-                    <div class="input-group-btn">
-                        <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
-                   </div>
-               </div>
-           </form>
-       </div>
-        <br />
-        <br/>
-        <table style="width: 100%;" border="1px" padding="0px">
-            <div class="text-center">
-                <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
+    <div class="col-md-4 col-md-offset-4">
+        <form class="navbar-form" role="search">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="q">
+                <div class="input-group-btn">
+                    <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
+                </div>
             </div>
-            @foreach (var question in Model)
-            {
-                string link = "http://www.stackoverflow.com" + @question.QuestionLink;
+        </form>
+    </div>
+    <br/>
+    <br/>
+    <table style="width: 100%;" border="1px" padding="0px">
+        <div class="text-center">
+            <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
+        </div>
+        @foreach (var item in Model)
+        {
+            string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
 
-                <td>
-                    <a href="@link" style="width: auto; height: 72px;">
-                        <h4>@Html.DisplayFor(modelItem => question.QuestionTitle)</h4>
-                    </a>
-                </td>
+            <td>
+                <a href="@link" style="width: auto; height: 72px;">
+                    <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
+                </a>
+            </td>
 
-            }
-        </table>
-        <!-- Search Navbar - END -->
+        }
+    </table>
+
+    <table style="width: 100%;" border="1px" padding="0px">
+        <div class="text-center">
+            <h2 style="margin-left: auto; margin-right: auto;">MSDN</h2>
+        </div>
+        @foreach (var item2 in Model)
+        {
+            <td>
+                <a href="@item2.msdn.QueryURL" style="width: auto; height: 72px;">
+                    <h4>@Html.DisplayFor(modelItem => item2.msdn.QueryTitle)</h4>
+                </a>
+            </td>
+
+        }
+    </table>
+    <!-- Search Navbar - END -->
 
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

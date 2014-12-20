@@ -2,11 +2,20 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using HtmlAgilityPack;
+using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PagedList;
+using SparkHelp.Models;
+using SparkHelp.ViewModels;
 
 namespace SparkHelp.Controllers
 {
@@ -14,6 +23,7 @@ namespace SparkHelp.Controllers
     {
         SparkHelp_dbEntities db = new SparkHelp_dbEntities();
         string resultQuery = "";
+        string msdn_resultQuery = "";
         public ActionResult Index(string queried, int? page)
         {
             Console.WriteLine(queried);
@@ -27,6 +37,7 @@ namespace SparkHelp.Controllers
 
                 
                 int i = 0;
+                int j = 0;
                 foreach (string s in newQuery)
                 {
                     if (s[i] == s[0])
@@ -36,16 +47,79 @@ namespace SparkHelp.Controllers
                     i++;
                 }
 
+                foreach (string st in newQuery)
+                {
+                    if (st[j] == st[0])
+                        msdn_resultQuery += st;
+                    else
+                        msdn_resultQuery += "%20" + st;
+                    j++;
+                }
+
+                
+
 
                 var grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
-                var count = grabQuestions.ToList().Count;
-                if(count == 0)
-                    GetLinks(resultQuery);
-                
-                List<Question> list = grabQuestions.ToList();
-                return View(grabQuestions.ToList().ToPagedList(page ?? 1, 15));
+                var so_count = grabQuestions.ToList().Count;
+                var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
+                var msdn_count = grabMSDN.ToList().Count;
+
+                int x = 0;
+                int y = 0;
+                string new_so_query = "";
+                char[] so_delims = {'+'};
+                string[] so_query = resultQuery.Split(so_delims);
+                foreach (string s in so_query)
+                {
+                    if (s[x] == s[0])
+                        new_so_query += s;
+                    else
+                        break;
+                    x++;
+                }
+
+                string new_msdn_query = "";
+                char[] msdn_delims = {'%'};
+                string[] msdn_query = msdn_resultQuery.Split(msdn_delims);
+                foreach (string s in msdn_query)
+                {
+                    if (s[y] == s[0])
+                        new_msdn_query += s;
+                    else
+                        break;
+                    y++;
+                }
+           
+
+
+                /*if(so_count == 0)
+                    GetStackData(resultQuery);*/
+
+                    
+
+                //var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
+                //var msdn_count = grabMSDN.ToList().Count;
+
+                if (so_count == 0)
+                {
+                    GetStackData(resultQuery);
+                    grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                }
+
+                if (msdn_count == 0)
+                {
+                    GetMSDNData(resultQuery);
+                    grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
+                }
+
+                var grab_all =
+                 from m in grabMSDN
+                 join q in grabQuestions on m.QuerySearch equals q.QuestionQuery
+                 where m.QuerySearch == resultQuery
+                 select new ResultsViewModel { question = q, msdn = m };
+                return View(grab_all.ToList().ToPagedList(page ?? 1, 8));
             }
-            List<Question> emptyList = new List<Question>();
+            List<ResultsViewModel> emptyList = new List<ResultsViewModel>();
             return View(emptyList.ToPagedList(page ?? 1, 6));
         }
 
@@ -63,7 +137,100 @@ namespace SparkHelp.Controllers
             return View();
         }
 
-        public void GetLinks(string query)
+        public void GetMSDNData(string query)
+        {
+            string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query + "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var response = (HttpWebResponse) request.GetResponse();
+            var reader = new StreamReader(response.GetResponseStream());
+            var objText = reader.ReadToEnd();
+
+            doc.LoadHtml(objText);
+
+            //dynamic obj = JObject.Parse(objText);
+            //string query2 = obj.query.results;
+
+            dynamic data = JObject.Parse(objText);
+            JArray test = data.data.results;
+
+            List<string> parsedJArray = new List<string>();
+            List<string> parsedTitles = new List<string>();
+            
+            foreach(var item in test)
+            {
+                MSDN_Object msdn_result_object = new MSDN_Object();
+                msdn_result_object.title = item.Value<string>("title");
+                msdn_result_object.description = item.Value<string>("description");
+                msdn_result_object.url = item.Value<string>("display_url");
+                msdn_result_object.query = resultQuery;
+                //need to get rating
+                //msdn_result_object.rating = test[idx].First.Value<float>("rating");
+                InsertIntoDB(msdn_result_object);
+                //Console.WriteLine("debug");
+            }
+
+            //HtmlDocument doc = new HtmlDocument();
+            //HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+            /*var response = (HttpWebResponse) request.GetResponse();
+            var reader = new StreamReader(response.GetResponseStream());
+            var objText = reader.ReadToEnd();
+
+            doc.LoadHtml(objText);*/
+
+            /* HtmlNodeCollection tl = doc.DocumentNode.SelectNodes(@"/query");
+            foreach (HtmlNode node in tl)
+            {
+                Console.WriteLine(node.InnerText);
+            }*/
+
+
+
+        }
+
+        public void InsertIntoDB(MSDN_Object obj)
+        {
+            string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                if (conn.State != System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("Error in opening database connection!");
+                    return;
+                }
+
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO MSDN_table (QuerySearch, QueryTitle, QueryDescription, QueryURL) VALUES (@qsearch, @qtitle, @qdesc, @qURL)", conn))
+                {
+                    SqlParameter mTitle = new SqlParameter();
+                    mTitle.ParameterName = "@qtitle";
+                    mTitle.Value = obj.title;
+
+                    SqlParameter mURL = new SqlParameter();
+                    mURL.ParameterName = "@qURL";
+                    mURL.Value = obj.url;
+
+                    SqlParameter mDescription = new SqlParameter();
+                    mDescription.ParameterName = "@qdesc";
+                    mDescription.Value = obj.description;
+
+                    SqlParameter mQuery= new SqlParameter();
+                    mQuery.ParameterName = "@qsearch";
+                    mQuery.Value = obj.query;
+                    
+                    cmd.Parameters.Add(mTitle);
+                    cmd.Parameters.Add(mURL);
+                    cmd.Parameters.Add(mDescription);
+                    cmd.Parameters.Add(mQuery);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void GetStackData(string query)
         {
             string url = "http://stackoverflow.com/search?q=" + query;
             HtmlWeb web = new HtmlWeb();

@@ -33,5 +33,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MSDN_table">
+      <EntityTypeMapping TypeName="SparkHelp_dbModel.MSDN_table">
+        <MappingFragment StoreEntitySet="MSDN_table">
+          <ScalarProperty Name="QueryURL" ColumnName="QueryURL" />
+          <ScalarProperty Name="QueryDescription" ColumnName="QueryDescription" />
+          <ScalarProperty Name="QueryTitle" ColumnName="QueryTitle" />
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+          <ScalarProperty Name="QuerySearch" ColumnName="QuerySearch" />
+          <ScalarProperty Name="QueryID" ColumnName="QueryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -22,6 +22,7 @@
     <NavigationProperty Name="CheckedAnswers" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="Questions" ToRole="CheckedAnswers" />
     <NavigationProperty Name="UncheckedAnswers" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="Questions" ToRole="UncheckedAnswers" />
     <Property Name="QuestionQuery" Type="String" Nullable="false" MaxLength="250" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="MSDN_table" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" FromRole="Question" ToRole="MSDN_table" />
   </EntityType>
   <EntityType Name="UncheckedAnswer">
     <Key>
@@ -69,5 +70,34 @@
       <End Role="Questions" EntitySet="Questions" />
       <End Role="UncheckedAnswers" EntitySet="UncheckedAnswers" />
     </AssociationSet>
+    <EntitySet Name="MSDN_table" EntityType="SparkHelp_dbModel.MSDN_table" />
+    <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D" Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="MSDN_table" EntitySet="MSDN_table" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="MSDN_table">
+    <Key>
+      <PropertyRef Name="QueryID" />
+    </Key>
+    <Property Name="QueryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuerySearch" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="QuestionID" Type="Int32" />
+    <Property Name="QueryTitle" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Question" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" FromRole="MSDN_table" ToRole="Question" />
+    <Property Name="QueryDescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="QueryURL" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK__MSDN_tabl__Quest__4F7CD00D">
+    <End Type="SparkHelp_dbModel.Question" Role="Question" Multiplicity="0..1" />
+    <End Type="SparkHelp_dbModel.MSDN_table" Role="MSDN_table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="QuestionID" />
+      </Principal>
+      <Dependent Role="MSDN_table">
+        <PropertyRef Name="QuestionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>
