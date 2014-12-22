@@ -50,16 +50,22 @@
     <div class="col-md-12">
         <h2 style="margin-left: auto; margin-right: auto;">MSDN</h2>
         <ul class="list-results">
+            @{
+                string prevString = "";
+            }
             @foreach (var item in Model)
             {
-                
+                if(item.msdn.QueryTitle != prevString)
+                {
+                     <li>
+                        <a href="@item.msdn.QueryURL" stZyle="width: auto; height: 72px;">
+                            <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
+                        </a>
+                    </li>
+                }
 
-                <li>
-                    <a href="@item.msdn.QueryURL" stZyle="width: auto; height: 72px;">
-                        <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
-                    </a>
-                </li>
 
+                prevString = item.msdn.QueryTitle;
             }
             </ul>
     </div>
