@@ -7,6 +7,7 @@
 }
 <link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="Content/Site.css" />
 <div class="container">
 
     <div class="text-center">
@@ -28,37 +29,41 @@
     </div>
     <br/>
     <br/>
-    <table style="width: 100%;" border="1px" padding="0px">
-        <div class="text-center">
-            <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
-        </div>
-        @foreach (var item in Model)
-        {
-            string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
 
-            <td>
-                <a href="@link" style="width: auto; height: 72px;">
-                    <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
-                </a>
-            </td>
+    <div class="col-md-12">
+        <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
+        <ul class="list-results">
+            @foreach (var item in Model)
+            {
+                string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
 
-        }
-    </table>
+                <li>
+                    <a href="@link" style="width: auto; height: 72px;">
+                        <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
+                    </a>
+                </li>
 
-    <table style="width: 100%;" border="1px" padding="0px">
-        <div class="text-center">
-            <h2 style="margin-left: auto; margin-right: auto;">MSDN</h2>
-        </div>
-        @foreach (var item2 in Model)
-        {
-            <td>
-                <a href="@item2.msdn.QueryURL" style="width: auto; height: 72px;">
-                    <h4>@Html.DisplayFor(modelItem => item2.msdn.QueryTitle)</h4>
-                </a>
-            </td>
+            }  
+        </ul>
+    </div>
 
-        }
-    </table>
+    <div class="col-md-12">
+        <h2 style="margin-left: auto; margin-right: auto;">MSDN</h2>
+        <ul class="list-results">
+            @foreach (var item in Model)
+            {
+                string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
+
+                <li>
+                    <a href="@item2.msdn.QueryURL" style="width: auto; height: 72px;">
+                        <h4>@Html.DisplayFor(modelItem => item2.msdn.QueryTitle)</h4>
+                    </a>
+                </li>
+
+            }
+            </ul>
+    </div>
+
     <!-- Search Navbar - END -->
 
-</div>
+	</div>
