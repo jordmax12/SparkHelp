@@ -1,4 +1,4 @@
-﻿body {
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -22,3 +22,20 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.list-results{
+    list-style-type: none;
+}
+
+.list-results li{
+    float: left;
+    overflow: hidden;
+    width: 24%;
+    text-align: center;
+    padding: 8px 0px;
+    border: 1px solid black;
+}
+
+.list-results li:nth-child(4n+1){
+    clear: both;
+	}
