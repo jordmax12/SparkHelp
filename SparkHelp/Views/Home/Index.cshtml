@@ -7,7 +7,7 @@
 }
 <link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
-
+<link rel="stylesheet" type="text/css" href="Content/Site.css" />
 <div class="container">
 
     <div class="text-center">
@@ -52,11 +52,11 @@
         <ul class="list-results">
             @foreach (var item in Model)
             {
-                string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
+                
 
                 <li>
-                    <a href="@item2.msdn.QueryURL" style="width: auto; height: 72px;">
-                        <h4>@Html.DisplayFor(modelItem => item2.msdn.QueryTitle)</h4>
+                    <a href="@item.msdn.QueryURL" stZyle="width: auto; height: 72px;">
+                        <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                     </a>
                 </li>
 
@@ -66,4 +66,4 @@
 
     <!-- Search Navbar - END -->
 
-	</div>
+</div>
