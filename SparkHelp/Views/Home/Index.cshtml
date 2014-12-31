@@ -1,6 +1,6 @@
 @using PagedList.Mvc;
 @using PagedList;
-@model IPagedList<SparkHelp.ViewModels.ResultsViewModel>
+@model IList<SparkHelp.ViewModels.ResultsViewModel>
 @{
     ViewBag.Title = "Home Page";
 
@@ -31,43 +31,58 @@
     <br/>
 
     <div class="col-md-12">
-        <h2 style="margin-left: auto; margin-right: auto;">Stack Overflow</h2>
-        <ul class="list-results">
-            @foreach (var item in Model)
-            {
-                string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
-
-                <li>
-                    <a href="@link" style="width: auto; height: 72px;">
-                        <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
-                    </a>
-                </li>
-
-            }  
-        </ul>
-    </div>
-
-    <div class="col-md-12">
-        <h2 style="margin-left: auto; margin-right: auto;">MSDN</h2>
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
+        <br />
         <ul class="list-results">
             @{
-                string prevString = "";
+                int page = 0;
+                int index = 0;
             }
             @foreach (var item in Model)
             {
-                if(item.msdn.QueryTitle != prevString)
+                if (index < 8)
                 {
-                     <li>
+                    string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
+
+                    <li>
+                        <a href="@link" style="width: auto; height: 72px;">
+                            <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
+                        </a>
+                    </li>
+                    index++;
+                }
+
+            }
+
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <br />
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>
+        <br/>
+        <ul class="list-results">
+
+            @{
+                string prevString = "";
+                page = 0;
+                index = 0;
+            }
+            @foreach (var item in Model)
+            {
+                if (item.msdn.QueryTitle != prevString && index < 8)
+                {
+
+                    <li>
                         <a href="@item.msdn.QueryURL" stZyle="width: auto; height: 72px;">
                             <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                         </a>
                     </li>
+                    index++;
                 }
-
 
                 prevString = item.msdn.QueryTitle;
             }
-            </ul>
+        </ul>
     </div>
 
     <!-- Search Navbar - END -->

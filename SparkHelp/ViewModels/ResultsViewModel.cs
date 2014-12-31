@@ -9,5 +9,6 @@ namespace SparkHelp.ViewModels
     {
         public Question question { get; set; }
         public MSDN_table msdn { get; set; }
+        public string title { get; set; }
     }
 }

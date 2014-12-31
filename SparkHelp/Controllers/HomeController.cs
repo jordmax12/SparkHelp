@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -16,6 +17,8 @@ using Newtonsoft.Json.Linq;
 using PagedList;
 using SparkHelp.Models;
 using SparkHelp.ViewModels;
+using StackExchange.StacMan;
+using StackExchange.StacMan.Questions;
 
 namespace SparkHelp.Controllers
 {
@@ -130,26 +133,26 @@ namespace SparkHelp.Controllers
                 grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
                 foreach (var item in grabMSDN)
                 {
-                    if (item.QueryTitle != prevMSDNString)
+                    if (item.QueryTitle.Trim() != prevMSDNString)
                         finalMSDN.Add(item);
-                    else
-                        finalMSDN.Remove(item);
-                     
 
-                    prevMSDNString = item.QueryTitle;
+                    prevMSDNString = item.QueryTitle.Trim();
                 }
+
                 List<ResultsViewModel> returnGrabbedList = new List<ResultsViewModel>();
                 var grab_all =
                  from m in finalMSDN
                  join q in finalQuestions on m.QuerySearch.Trim() equals q.QuestionQuery.Trim()
                  select new ResultsViewModel { question = q, msdn = m };
 
+            
 
 
-                return View(grab_all.ToList().ToPagedList(page ?? 1, 8));
+                return View(grab_all.ToList());
+                //.ToPagedList(page ?? 1, 8)
             }
             List<ResultsViewModel> emptyList = new List<ResultsViewModel>();
-            return View(emptyList.ToPagedList(page ?? 1, 6));
+            return View(emptyList);
         }
 
         public ActionResult About()
@@ -196,7 +199,7 @@ namespace SparkHelp.Controllers
                 msdn_result_object.query = resultQuery;
                 //need to get rating
                 //msdn_result_object.rating = test[idx].First.Value<float>("rating");
-                InsertIntoDB(msdn_result_object);
+                InsertIntoDB(msdn_result_object, "msdn");
                 //Console.WriteLine("debug");
             }
 
@@ -218,7 +221,55 @@ namespace SparkHelp.Controllers
 
         }
 
-        public void InsertIntoDB(MSDN_Object obj)
+        public void InsertIntoDB(Stack_Object obj, string table)
+        {
+            string connString =
+                System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                if (conn.State != System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("Error in opening database connection!");
+                    return;
+                }
+
+                using (
+                    SqlCommand cmd =
+                        new SqlCommand(
+                            "INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionVote, QuestionQuery) VALUES (@qtitle, @qlink, @qvote, @qquery)",
+                            conn))
+                {
+                    SqlParameter sTitle = new SqlParameter();
+                    sTitle.ParameterName = "@qtitle";
+                    sTitle.Value = obj.title;
+
+                    SqlParameter sLink = new SqlParameter();
+                    sLink.ParameterName = "@qlink";
+                    sLink.Value = obj.link;
+
+                    SqlParameter sRating = new SqlParameter();
+                    sRating.ParameterName = "@qvote";
+                    sRating.Value = obj.rating;
+
+                    SqlParameter sQuery = new SqlParameter();
+                    sQuery.ParameterName = "@qquery";
+                    sQuery.Value = resultQuery;
+
+                    cmd.Parameters.Add(sTitle);
+                    cmd.Parameters.Add(sLink);
+                    cmd.Parameters.Add(sRating);
+                    cmd.Parameters.Add(sQuery);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+
+
+            }
+        }
+
+        public void InsertIntoDB(MSDN_Object obj, string table)
         {
             string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -261,13 +312,31 @@ namespace SparkHelp.Controllers
 
         public void GetStackData(string query)
         {
-            string url = "http://stackoverflow.com/search?q=" + query;
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(url);
-            List<string> results = new List<string>();
+            var client = new StacManClient(key: "DVtF2taHDlKbZ3TEP8P9Yw((", version: "2.1");
+
+            //var response = client.Sites.GetAll(filter: "default", page: 1, pagesize: 1).Result;
+            var response = client.Search.GetMatchesAdvanced(site: "stackoverflow", filter: "default", page: null,
+                pagesize: null, fromdate: null, todate: null,
+                sort: SearchSort.Relevance, mindate: null, maxdate: null,
+                min: null, max: null, order: Order.Desc, q: query, accepted: null,
+                answers: null, body: null, closed: null, migrated: null, notice: null,
+                nottagged: null, tagged: null,
+                title: null, user: null, url: null, views: null, wiki: null).Result;
+            foreach (var question in response.Data.Items)
+            {
+                Console.WriteLine(question.Title);
+                Stack_Object stackObject = new Stack_Object();
+                stackObject.title = question.Title;
+                stackObject.link = question.Link;
+                stackObject.rating = question.Score;
+                stackObject.query = query;
+                
+                InsertIntoDB(stackObject, "stackoverflow");
+
+            }
             
 
-            if (doc.DocumentNode.SelectNodes("//div [@class=\"result-link\"]") != null)
+            /*if (doc.DocumentNode.SelectNodes("//div [@class=\"result-link\"]") != null)
             {
                 foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div [@class=\"result-link\"]"))
                 {
@@ -405,7 +474,7 @@ namespace SparkHelp.Controllers
                 {
                     Console.WriteLine(node.InnerHtml);
                 }
-            }
+            }*/
         }
     }
 

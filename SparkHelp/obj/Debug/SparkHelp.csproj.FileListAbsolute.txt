@@ -121,3 +121,6 @@ C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\PagedList.Mvc.xml
 \\vmware-host\Shared Folders\Desktop\SparkHelp\SparkHelp\obj\Debug\SparkHelp.csprojResolveAssemblyReference.cache
 \\vmware-host\Shared Folders\Desktop\SparkHelp\SparkHelp\obj\Debug\SparkHelp.dll
 \\vmware-host\Shared Folders\Desktop\SparkHelp\SparkHelp\obj\Debug\SparkHelp.pdb
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\StacMan.dll
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\StacMan.pdb
+C:\Users\Jordan\Documents\GitHub\SparkHelp\SparkHelp\bin\StacMan.xml
