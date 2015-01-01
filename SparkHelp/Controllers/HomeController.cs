@@ -156,13 +156,13 @@ namespace SparkHelp.Controllers
                     if (item.Title.Trim() != prevCPstring)
                         finalCP.Add(item);
 
-                    prevMSDNString = item.Title.Trim();
+                    prevCPstring = item.Title.Trim();
                 }
 
                 var grab_all =
                  from m in finalMSDN
                  join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                 join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
+                 join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
                  select new ResultsViewModel { stack = s, msdn = m, CP = c};
 
                 return View(grab_all.ToList());
