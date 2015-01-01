@@ -6,12 +6,13 @@
     <edmx:Diagrams>
       <Diagram DiagramId="3ddc3925ff25479faef94c7f9d07af4f" Name="Diagram1">
         <EntityTypeShape EntityType="SparkHelp_dbModel.CheckedAnswer" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SparkHelp_dbModel.Question" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SparkHelp_dbModel.UncheckedAnswer" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D1" ManuallyRouted="false" />
-        <AssociationConnector Association="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C" ManuallyRouted="false" />
         <EntityTypeShape EntityType="SparkHelp_dbModel.MSDN_table" Width="1.5" PointX="3" PointY="6.5" />
-        <AssociationConnector Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" />
+        <EntityTypeShape EntityType="SparkHelp_dbModel.CodeProject" Width="1.5" PointX="4.875" PointY="3.75" />
+        <EntityTypeShape EntityType="SparkHelp_dbModel.StackOverflow" Width="1.5" PointX="0.875" PointY="3.875" />
+        <AssociationConnector Association="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D11" />
+        <AssociationConnector Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D1" />
+        <AssociationConnector Association="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

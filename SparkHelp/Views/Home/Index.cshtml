@@ -42,11 +42,11 @@
             {
                 if (index < 8)
                 {
-                    string link = "http://www.stackoverflow.com" + @item.question.QuestionLink;
+                    string link = "http://www.stackoverflow.com" + @item.stack.QuestionLink;
 
                     <li>
                         <a href="@link" style="width: auto; height: 72px;">
-                            <h4>@Html.DisplayFor(modelItem => item.question.QuestionTitle)</h4>
+                            <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
                     </li>
                     index++;
@@ -57,7 +57,7 @@
         </ul>
     </div>
     <div class="col-md-12">
-        <br />
+        <br/>
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>
         <br/>
         <ul class="list-results">
@@ -81,6 +81,35 @@
                 }
 
                 prevString = item.msdn.QueryTitle;
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-12">
+        <br />
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
+        <br />
+        <ul class="list-results">
+
+            @{
+                string prevString2 = "";
+                page = 0;
+                index = 0;
+            }
+            @foreach (var item in Model)
+            {
+                if (item.CP.Title!= prevString && index < 8)
+                {
+
+                    <li>
+                        <a href="@item.CP.Link" stzyle="width: auto; height: 72px;">
+                            <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
+                        </a>
+                    </li>
+                    index++;
+                }
+
+                prevString2 = item.CP.Title;
             }
         </ul>
     </div>

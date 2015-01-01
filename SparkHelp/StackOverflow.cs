@@ -12,13 +12,13 @@ namespace SparkHelp
     using System;
     using System.Collections.Generic;
     
-    public partial class Question
+    public partial class StackOverflow
     {
-        public Question()
+        public StackOverflow()
         {
             this.CheckedAnswers = new HashSet<CheckedAnswer>();
-            this.UncheckedAnswers = new HashSet<UncheckedAnswer>();
             this.MSDN_table = new HashSet<MSDN_table>();
+            this.UncheckedAnswers = new HashSet<UncheckedAnswer>();
         }
     
         public int QuestionID { get; set; }
@@ -29,7 +29,7 @@ namespace SparkHelp
         public string QuestionQuery { get; set; }
     
         public virtual ICollection<CheckedAnswer> CheckedAnswers { get; set; }
-        public virtual ICollection<UncheckedAnswer> UncheckedAnswers { get; set; }
         public virtual ICollection<MSDN_table> MSDN_table { get; set; }
+        public virtual ICollection<UncheckedAnswer> UncheckedAnswers { get; set; }
     }
 }

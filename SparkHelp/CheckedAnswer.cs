@@ -19,6 +19,6 @@ namespace SparkHelp
         public string AnswerText { get; set; }
         public Nullable<int> AnswerVote { get; set; }
     
-        public virtual Question Question { get; set; }
+        public virtual StackOverflow StackOverflow { get; set; }
     }
 }

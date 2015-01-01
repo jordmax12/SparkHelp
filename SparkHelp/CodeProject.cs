@@ -12,15 +12,14 @@ namespace SparkHelp
     using System;
     using System.Collections.Generic;
     
-    public partial class MSDN_table
+    public partial class CodeProject
     {
-        public int QueryID { get; set; }
-        public string QuerySearch { get; set; }
-        public Nullable<int> QuestionID { get; set; }
-        public string QueryTitle { get; set; }
-        public string QueryDescription { get; set; }
-        public string QueryURL { get; set; }
-    
-        public virtual StackOverflow StackOverflow { get; set; }
+        public int QuestionID { get; set; }
+        public string Title { get; set; }
+        public string Link { get; set; }
+        public Nullable<double> Rating { get; set; }
+        public Nullable<int> Votes { get; set; }
+        public string Summary { get; set; }
+        public string QuestionQuery { get; set; }
     }
 }

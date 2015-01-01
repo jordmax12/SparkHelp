@@ -7,8 +7,9 @@ namespace SparkHelp.ViewModels
 {
     public class ResultsViewModel
     {
-        public Question question { get; set; }
+        public StackOverflow stack { get; set; }
         public MSDN_table msdn { get; set; }
+        public CodeProject CP { get; set; }
         public string title { get; set; }
     }
 }

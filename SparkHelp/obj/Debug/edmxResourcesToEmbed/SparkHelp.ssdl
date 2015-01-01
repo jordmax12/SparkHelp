@@ -9,6 +9,18 @@
     <Property Name="AnswerText" Type="char" MaxLength="25" />
     <Property Name="AnswerVote" Type="int" />
   </EntityType>
+  <EntityType Name="CodeProject">
+    <Key>
+      <PropertyRef Name="QuestionID" />
+    </Key>
+    <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Rating" Type="float" />
+    <Property Name="Votes" Type="int" />
+    <Property Name="Summary" Type="nvarchar" MaxLength="4000" />
+    <Property Name="QuestionQuery" Type="nvarchar" MaxLength="100" />
+  </EntityType>
   <EntityType Name="MSDN_table">
     <Key>
       <PropertyRef Name="QueryID" />
@@ -20,7 +32,7 @@
     <Property Name="QueryTitle" Type="nvarchar" MaxLength="75" />
     <Property Name="QueryURL" Type="nvarchar" MaxLength="75" />
   </EntityType>
-  <EntityType Name="Questions">
+  <EntityType Name="StackOverflow">
     <Key>
       <PropertyRef Name="QuestionID" />
     </Key>
@@ -41,10 +53,10 @@
     <Property Name="AnswerVote" Type="int" />
   </EntityType>
   <Association Name="FK__CheckedAn__Quest__34C8D9D1">
-    <End Role="Questions" Type="Self.Questions" Multiplicity="1" />
+    <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
     <End Role="CheckedAnswers" Type="Self.CheckedAnswers" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Questions">
+      <Principal Role="StackOverflow">
         <PropertyRef Name="QuestionID" />
       </Principal>
       <Dependent Role="CheckedAnswers">
@@ -53,10 +65,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK__MSDN_tabl__Quest__4F7CD00D">
-    <End Role="Questions" Type="Self.Questions" Multiplicity="0..1" />
+    <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="0..1" />
     <End Role="MSDN_table" Type="Self.MSDN_table" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Questions">
+      <Principal Role="StackOverflow">
         <PropertyRef Name="QuestionID" />
       </Principal>
       <Dependent Role="MSDN_table">
@@ -65,10 +77,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK__Unchecked__Quest__37A5467C">
-    <End Role="Questions" Type="Self.Questions" Multiplicity="1" />
+    <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
     <End Role="UncheckedAnswers" Type="Self.UncheckedAnswers" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Questions">
+      <Principal Role="StackOverflow">
         <PropertyRef Name="QuestionID" />
       </Principal>
       <Dependent Role="UncheckedAnswers">
@@ -78,19 +90,20 @@
   </Association>
   <EntityContainer Name="SparkHelp_dbModelStoreContainer">
     <EntitySet Name="CheckedAnswers" EntityType="Self.CheckedAnswers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CodeProject" EntityType="Self.CodeProject" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MSDN_table" EntityType="Self.MSDN_table" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StackOverflow" EntityType="Self.StackOverflow" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
-      <End Role="Questions" EntitySet="Questions" />
+      <End Role="StackOverflow" EntitySet="StackOverflow" />
       <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
     </AssociationSet>
     <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D" Association="Self.FK__MSDN_tabl__Quest__4F7CD00D">
-      <End Role="Questions" EntitySet="Questions" />
+      <End Role="StackOverflow" EntitySet="StackOverflow" />
       <End Role="MSDN_table" EntitySet="MSDN_table" />
     </AssociationSet>
     <AssociationSet Name="FK__Unchecked__Quest__37A5467C" Association="Self.FK__Unchecked__Quest__37A5467C">
-      <End Role="Questions" EntitySet="Questions" />
+      <End Role="StackOverflow" EntitySet="StackOverflow" />
       <End Role="UncheckedAnswers" EntitySet="UncheckedAnswers" />
     </AssociationSet>
   </EntityContainer>

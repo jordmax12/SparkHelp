@@ -14,6 +14,18 @@
           <Property Name="AnswerText" Type="char" MaxLength="25" />
           <Property Name="AnswerVote" Type="int" />
         </EntityType>
+        <EntityType Name="CodeProject">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Rating" Type="float" />
+          <Property Name="Votes" Type="int" />
+          <Property Name="Summary" Type="nvarchar" MaxLength="4000" />
+          <Property Name="QuestionQuery" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="MSDN_table">
           <Key>
             <PropertyRef Name="QueryID" />
@@ -25,7 +37,7 @@
           <Property Name="QueryTitle" Type="nvarchar" MaxLength="75" />
           <Property Name="QueryURL" Type="nvarchar" MaxLength="75" />
         </EntityType>
-        <EntityType Name="Questions">
+        <EntityType Name="StackOverflow">
           <Key>
             <PropertyRef Name="QuestionID" />
           </Key>
@@ -46,10 +58,10 @@
           <Property Name="AnswerVote" Type="int" />
         </EntityType>
         <Association Name="FK__CheckedAn__Quest__34C8D9D1">
-          <End Role="Questions" Type="Self.Questions" Multiplicity="1" />
+          <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
           <End Role="CheckedAnswers" Type="Self.CheckedAnswers" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Questions">
+            <Principal Role="StackOverflow">
               <PropertyRef Name="QuestionID" />
             </Principal>
             <Dependent Role="CheckedAnswers">
@@ -58,10 +70,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__MSDN_tabl__Quest__4F7CD00D">
-          <End Role="Questions" Type="Self.Questions" Multiplicity="0..1" />
+          <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="0..1" />
           <End Role="MSDN_table" Type="Self.MSDN_table" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Questions">
+            <Principal Role="StackOverflow">
               <PropertyRef Name="QuestionID" />
             </Principal>
             <Dependent Role="MSDN_table">
@@ -70,10 +82,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Unchecked__Quest__37A5467C">
-          <End Role="Questions" Type="Self.Questions" Multiplicity="1" />
+          <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
           <End Role="UncheckedAnswers" Type="Self.UncheckedAnswers" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Questions">
+            <Principal Role="StackOverflow">
               <PropertyRef Name="QuestionID" />
             </Principal>
             <Dependent Role="UncheckedAnswers">
@@ -83,19 +95,20 @@
         </Association>
         <EntityContainer Name="SparkHelp_dbModelStoreContainer">
           <EntitySet Name="CheckedAnswers" EntityType="Self.CheckedAnswers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CodeProject" EntityType="Self.CodeProject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MSDN_table" EntityType="Self.MSDN_table" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StackOverflow" EntityType="Self.StackOverflow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
-            <End Role="Questions" EntitySet="Questions" />
+            <End Role="StackOverflow" EntitySet="StackOverflow" />
             <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
           </AssociationSet>
           <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D" Association="Self.FK__MSDN_tabl__Quest__4F7CD00D">
-            <End Role="Questions" EntitySet="Questions" />
+            <End Role="StackOverflow" EntitySet="StackOverflow" />
             <End Role="MSDN_table" EntitySet="MSDN_table" />
           </AssociationSet>
           <AssociationSet Name="FK__Unchecked__Quest__37A5467C" Association="Self.FK__Unchecked__Quest__37A5467C">
-            <End Role="Questions" EntitySet="Questions" />
+            <End Role="StackOverflow" EntitySet="StackOverflow" />
             <End Role="UncheckedAnswers" EntitySet="UncheckedAnswers" />
           </AssociationSet>
         </EntityContainer>
@@ -111,21 +124,7 @@
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
           <Property Name="AnswerText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
           <Property Name="AnswerVote" Type="Int32" />
-          <NavigationProperty Name="Question" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="CheckedAnswers" ToRole="Questions" />
-        </EntityType>
-        <EntityType Name="Question">
-          <Key>
-            <PropertyRef Name="QuestionID" />
-          </Key>
-          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QuestionTitle" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
-          <Property Name="QuestionLink" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
-          <Property Name="QuestionText" Type="String" MaxLength="2001" FixedLength="true" Unicode="false" />
-          <Property Name="QuestionVote" Type="Int32" />
-          <NavigationProperty Name="CheckedAnswers" Relationship="Self.FK__CheckedAn__Quest__34C8D9D1" FromRole="Questions" ToRole="CheckedAnswers" />
-          <NavigationProperty Name="UncheckedAnswers" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="Questions" ToRole="UncheckedAnswers" />
-          <Property Name="QuestionQuery" Type="String" Nullable="false" MaxLength="250" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="MSDN_table" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" FromRole="Question" ToRole="MSDN_table" />
+          <NavigationProperty Name="StackOverflow" Relationship="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D11" FromRole="CheckedAnswer" ToRole="StackOverflow" />
         </EntityType>
         <EntityType Name="UncheckedAnswer">
           <Key>
@@ -135,48 +134,25 @@
           <Property Name="QuestionID" Type="Int32" Nullable="false" />
           <Property Name="AnswerText" Type="String" MaxLength="25" FixedLength="true" Unicode="false" />
           <Property Name="AnswerVote" Type="Int32" />
-          <NavigationProperty Name="Question" Relationship="Self.FK__Unchecked__Quest__37A5467C" FromRole="UncheckedAnswers" ToRole="Questions" />
+          <NavigationProperty Name="StackOverflow" Relationship="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C1" FromRole="UncheckedAnswer" ToRole="StackOverflow" />
         </EntityType>
-        <Association Name="FK__CheckedAn__Quest__34C8D9D1">
-          <End Role="Questions" Type="Self.Question" Multiplicity="1" />
-          <End Role="CheckedAnswers" Type="Self.CheckedAnswer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Questions">
-              <PropertyRef Name="QuestionID" />
-            </Principal>
-            <Dependent Role="CheckedAnswers">
-              <PropertyRef Name="QuestionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Unchecked__Quest__37A5467C">
-          <End Role="Questions" Type="Self.Question" Multiplicity="1" />
-          <End Role="UncheckedAnswers" Type="Self.UncheckedAnswer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Questions">
-              <PropertyRef Name="QuestionID" />
-            </Principal>
-            <Dependent Role="UncheckedAnswers">
-              <PropertyRef Name="QuestionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="SparkHelp_dbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CheckedAnswers" EntityType="Self.CheckedAnswer" />
-          <EntitySet Name="Questions" EntityType="Self.Question" />
           <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswer" />
-          <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
-            <End Role="Questions" EntitySet="Questions" />
-            <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Unchecked__Quest__37A5467C" Association="Self.FK__Unchecked__Quest__37A5467C">
-            <End Role="Questions" EntitySet="Questions" />
-            <End Role="UncheckedAnswers" EntitySet="UncheckedAnswers" />
-          </AssociationSet>
           <EntitySet Name="MSDN_table" EntityType="SparkHelp_dbModel.MSDN_table" />
-          <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D" Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D">
-            <End Role="Question" EntitySet="Questions" />
+          <EntitySet Name="CodeProjects" EntityType="SparkHelp_dbModel.CodeProject" />
+          <EntitySet Name="StackOverflows" EntityType="SparkHelp_dbModel.StackOverflow" />
+          <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D11" Association="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D11">
+            <End Role="StackOverflow" EntitySet="StackOverflows" />
+            <End Role="CheckedAnswer" EntitySet="CheckedAnswers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MSDN_tabl__Quest__4F7CD00D1" Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D1">
+            <End Role="StackOverflow" EntitySet="StackOverflows" />
             <End Role="MSDN_table" EntitySet="MSDN_table" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Unchecked__Quest__37A5467C1" Association="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C1">
+            <End Role="StackOverflow" EntitySet="StackOverflows" />
+            <End Role="UncheckedAnswer" EntitySet="UncheckedAnswers" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="MSDN_table">
@@ -187,18 +163,68 @@
           <Property Name="QuerySearch" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
           <Property Name="QuestionID" Type="Int32" />
           <Property Name="QueryTitle" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Question" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D" FromRole="MSDN_table" ToRole="Question" />
           <Property Name="QueryDescription" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="QueryURL" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StackOverflow" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D1" FromRole="MSDN_table" ToRole="StackOverflow" />
         </EntityType>
-        <Association Name="FK__MSDN_tabl__Quest__4F7CD00D">
-          <End Type="SparkHelp_dbModel.Question" Role="Question" Multiplicity="0..1" />
+        <EntityType Name="CodeProject">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Rating" Type="Double" />
+          <Property Name="Votes" Type="Int32" />
+          <Property Name="Summary" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionQuery" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="StackOverflow">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionTitle" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
+          <Property Name="QuestionLink" Type="String" MaxLength="250" FixedLength="true" Unicode="false" />
+          <Property Name="QuestionText" Type="String" MaxLength="2001" FixedLength="true" Unicode="false" />
+          <Property Name="QuestionVote" Type="Int32" />
+          <Property Name="QuestionQuery" Type="String" Nullable="false" MaxLength="250" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="CheckedAnswers" Relationship="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D11" FromRole="StackOverflow" ToRole="CheckedAnswer" />
+          <NavigationProperty Name="MSDN_table" Relationship="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D1" FromRole="StackOverflow" ToRole="MSDN_table" />
+          <NavigationProperty Name="UncheckedAnswers" Relationship="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C1" FromRole="StackOverflow" ToRole="UncheckedAnswer" />
+        </EntityType>
+        <Association Name="FK__CheckedAn__Quest__34C8D9D11">
+          <End Type="SparkHelp_dbModel.StackOverflow" Role="StackOverflow" Multiplicity="1" />
+          <End Type="SparkHelp_dbModel.CheckedAnswer" Role="CheckedAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StackOverflow">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="CheckedAnswer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MSDN_tabl__Quest__4F7CD00D1">
+          <End Type="SparkHelp_dbModel.StackOverflow" Role="StackOverflow" Multiplicity="0..1" />
           <End Type="SparkHelp_dbModel.MSDN_table" Role="MSDN_table" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Question">
+            <Principal Role="StackOverflow">
               <PropertyRef Name="QuestionID" />
             </Principal>
             <Dependent Role="MSDN_table">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Unchecked__Quest__37A5467C1">
+          <End Type="SparkHelp_dbModel.StackOverflow" Role="StackOverflow" Multiplicity="1" />
+          <End Type="SparkHelp_dbModel.UncheckedAnswer" Role="UncheckedAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StackOverflow">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="UncheckedAnswer">
               <PropertyRef Name="QuestionID" />
             </Dependent>
           </ReferentialConstraint>
@@ -216,18 +242,6 @@
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
                 <ScalarProperty Name="AnswerVote" ColumnName="AnswerVote" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Questions">
-            <EntityTypeMapping TypeName="SparkHelp_dbModel.Question">
-              <MappingFragment StoreEntitySet="Questions">
-                <ScalarProperty Name="QuestionQuery" ColumnName="QuestionQuery" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-                <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
-                <ScalarProperty Name="QuestionLink" ColumnName="QuestionLink" />
-                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
-                <ScalarProperty Name="QuestionVote" ColumnName="QuestionVote" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -250,6 +264,31 @@
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
                 <ScalarProperty Name="QuerySearch" ColumnName="QuerySearch" />
                 <ScalarProperty Name="QueryID" ColumnName="QueryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CodeProjects">
+            <EntityTypeMapping TypeName="SparkHelp_dbModel.CodeProject">
+              <MappingFragment StoreEntitySet="CodeProject">
+                <ScalarProperty Name="QuestionQuery" ColumnName="QuestionQuery" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Votes" ColumnName="Votes" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StackOverflows">
+            <EntityTypeMapping TypeName="SparkHelp_dbModel.StackOverflow">
+              <MappingFragment StoreEntitySet="StackOverflow">
+                <ScalarProperty Name="QuestionQuery" ColumnName="QuestionQuery" />
+                <ScalarProperty Name="QuestionVote" ColumnName="QuestionVote" />
+                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
+                <ScalarProperty Name="QuestionLink" ColumnName="QuestionLink" />
+                <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

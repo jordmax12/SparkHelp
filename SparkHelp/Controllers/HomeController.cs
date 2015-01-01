@@ -59,13 +59,15 @@ namespace SparkHelp.Controllers
                     j++;
                 }
 
+
+
                 
-
-
-                var grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
                 var so_count = grabQuestions.ToList().Count;
                 var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
                 var msdn_count = grabMSDN.ToList().Count;
+                var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
+                var cp_count = grabCP.ToList().Count;
 
                 int x = 0;
                 int y = 0;
@@ -102,10 +104,12 @@ namespace SparkHelp.Controllers
 
                 //var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
                 //var msdn_count = grabMSDN.ToList().Count;
-                List<Question> finalQuestions = new List<Question>();
+                List<StackOverflow> finalStack = new List<StackOverflow>();
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
+                List<CodeProject> finalCP = new List<CodeProject>();
                 string prevMSDNString = "";
                 string prevSOstring = "";
+                string prevCPstring = "";
                 if (so_count == 0)
                 {
                     GetStackData(resultQuery);
@@ -120,11 +124,18 @@ namespace SparkHelp.Controllers
                 
                 }
 
-                grabQuestions = db.Questions.Where(q => q.QuestionQuery == resultQuery);
+                if (cp_count == 0)
+                {
+                    GetCPData(resultQuery);
+
+
+                }
+
+                grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
                 foreach (var item in grabQuestions)
                 {
                     if (item.QuestionTitle.Trim() != prevSOstring)
-                        finalQuestions.Add(item);
+                        finalStack.Add(item);
 
                     prevSOstring = item.QuestionTitle.Trim();
                 }
@@ -139,14 +150,20 @@ namespace SparkHelp.Controllers
                     prevMSDNString = item.QueryTitle.Trim();
                 }
 
-                List<ResultsViewModel> returnGrabbedList = new List<ResultsViewModel>();
+                grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery);
+                foreach (var item in grabCP)
+                {
+                    if (item.Title.Trim() != prevCPstring)
+                        finalCP.Add(item);
+
+                    prevMSDNString = item.Title.Trim();
+                }
+
                 var grab_all =
                  from m in finalMSDN
-                 join q in finalQuestions on m.QuerySearch.Trim() equals q.QuestionQuery.Trim()
-                 select new ResultsViewModel { question = q, msdn = m };
-
-            
-
+                 join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                 join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
+                 select new ResultsViewModel { stack = s, msdn = m, CP = c};
 
                 return View(grab_all.ToList());
                 //.ToPagedList(page ?? 1, 8)
@@ -169,57 +186,7 @@ namespace SparkHelp.Controllers
             return View();
         }
 
-        public void GetMSDNData(string query)
-        {
-            string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query + "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(url);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            var response = (HttpWebResponse) request.GetResponse();
-            var reader = new StreamReader(response.GetResponseStream());
-            var objText = reader.ReadToEnd();
-
-            doc.LoadHtml(objText);
-
-            //dynamic obj = JObject.Parse(objText);
-            //string query2 = obj.query.results;
-
-            dynamic data = JObject.Parse(objText);
-            JArray test = data.data.results;
-
-            List<string> parsedJArray = new List<string>();
-            List<string> parsedTitles = new List<string>();
-            
-            foreach(var item in test)
-            {
-                MSDN_Object msdn_result_object = new MSDN_Object();
-                msdn_result_object.title = item.Value<string>("title");
-                msdn_result_object.description = item.Value<string>("description");
-                msdn_result_object.url = item.Value<string>("display_url");
-                msdn_result_object.query = resultQuery;
-                //need to get rating
-                //msdn_result_object.rating = test[idx].First.Value<float>("rating");
-                InsertIntoDB(msdn_result_object, "msdn");
-                //Console.WriteLine("debug");
-            }
-
-            //HtmlDocument doc = new HtmlDocument();
-            //HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-            /*var response = (HttpWebResponse) request.GetResponse();
-            var reader = new StreamReader(response.GetResponseStream());
-            var objText = reader.ReadToEnd();
-
-            doc.LoadHtml(objText);*/
-
-            /* HtmlNodeCollection tl = doc.DocumentNode.SelectNodes(@"/query");
-            foreach (HtmlNode node in tl)
-            {
-                Console.WriteLine(node.InnerText);
-            }*/
-
-
-
-        }
+       
 
         public void InsertIntoDB(Stack_Object obj, string table)
         {
@@ -238,7 +205,7 @@ namespace SparkHelp.Controllers
                 using (
                     SqlCommand cmd =
                         new SqlCommand(
-                            "INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionVote, QuestionQuery) VALUES (@qtitle, @qlink, @qvote, @qquery)",
+                            "INSERT INTO StackOverflow (QuestionTitle, QuestionLink, QuestionVote, QuestionQuery) VALUES (@qtitle, @qlink, @qvote, @qquery)",
                             conn))
                 {
                     SqlParameter sTitle = new SqlParameter();
@@ -310,6 +277,111 @@ namespace SparkHelp.Controllers
             }
         }
 
+        public void InsertIntoDB(CP_Object obj)
+        {
+             string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                if (conn.State != System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("Error in opening database connection!");
+                    return;
+                }
+
+                using ( SqlCommand cmd =new SqlCommand(
+                    "INSERT INTO CodeProject (Title, Link, Rating, Votes, Summary, QuestionQuery) VALUES (@title, @link, @rating, @votes, @summary, @query)",
+                            conn))
+                {
+                    SqlParameter cTitle = new SqlParameter();
+                    cTitle.ParameterName = "@title";
+                    cTitle.Value = obj.title;
+
+                    SqlParameter cLink = new SqlParameter();
+                    cLink.ParameterName = "@link";
+                    cLink.Value = obj.link;
+
+                    SqlParameter cRating = new SqlParameter();
+                    cRating.ParameterName = "@rating";
+                    cRating.Value = obj.rating;
+
+                    SqlParameter cVotes = new SqlParameter();
+                    cVotes.ParameterName = "@votes";
+                    cVotes.Value = obj.votes;
+
+                    SqlParameter cSummary = new SqlParameter();
+                    cSummary.ParameterName = "@summary";
+                    cSummary.Value = obj.summary;
+
+                    SqlParameter cQuery = new SqlParameter();
+                    cQuery.ParameterName = "@query";
+                    cQuery.Value = obj.query;
+
+                    cmd.Parameters.Add(cTitle);
+                    cmd.Parameters.Add(cLink);
+                    cmd.Parameters.Add(cRating);
+                    cmd.Parameters.Add(cVotes);
+                    cmd.Parameters.Add(cSummary);
+                    cmd.Parameters.Add(cQuery);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void GetMSDNData(string query)
+        {
+            string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query + "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var response = (HttpWebResponse)request.GetResponse();
+            var reader = new StreamReader(response.GetResponseStream());
+            var objText = reader.ReadToEnd();
+
+            doc.LoadHtml(objText);
+
+            //dynamic obj = JObject.Parse(objText);
+            //string query2 = obj.query.results;
+
+            dynamic data = JObject.Parse(objText);
+            JArray test = data.data.results;
+
+            List<string> parsedJArray = new List<string>();
+            List<string> parsedTitles = new List<string>();
+
+            foreach (var item in test)
+            {
+                MSDN_Object msdn_result_object = new MSDN_Object();
+                msdn_result_object.title = item.Value<string>("title");
+                msdn_result_object.description = item.Value<string>("description");
+                msdn_result_object.url = item.Value<string>("display_url");
+                msdn_result_object.query = resultQuery;
+                //need to get rating
+                //msdn_result_object.rating = test[idx].First.Value<float>("rating");
+                InsertIntoDB(msdn_result_object, "msdn");
+                //Console.WriteLine("debug");
+            }
+
+            //HtmlDocument doc = new HtmlDocument();
+            //HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+            /*var response = (HttpWebResponse) request.GetResponse();
+            var reader = new StreamReader(response.GetResponseStream());
+            var objText = reader.ReadToEnd();
+
+            doc.LoadHtml(objText);*/
+
+            /* HtmlNodeCollection tl = doc.DocumentNode.SelectNodes(@"/query");
+            foreach (HtmlNode node in tl)
+            {
+                Console.WriteLine(node.InnerText);
+            }*/
+
+
+
+        }
+
         public void GetStackData(string query)
         {
             var client = new StacManClient(key: "DVtF2taHDlKbZ3TEP8P9Yw((", version: "2.1");
@@ -334,147 +406,40 @@ namespace SparkHelp.Controllers
                 InsertIntoDB(stackObject, "stackoverflow");
 
             }
+        }
+
+        public void GetCPData(string query)
+        {
+            string url = "http://www.codeproject.com/search.aspx?q=" + query + "&x=0&y=0&sbo=kw&pgsz=10";
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
             
-
-            /*if (doc.DocumentNode.SelectNodes("//div [@class=\"result-link\"]") != null)
+            int idx = 0;
+            if (doc.DocumentNode.SelectNodes("//div [@class=\"hover-container content-list-item\"]") != null)
             {
-                foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div [@class=\"result-link\"]"))
+                foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div [@class=\"entry\"]"))
                 {
-
-                    if (node == null)
-                        Console.WriteLine("debug");
-                    else
-                    {
-                        Question question = new Question();
-                        HtmlNode rows = node.SelectSingleNode(".//a");
-
-                        string sub_url = "http://stackoverflow.com" + rows.Attributes["href"].Value;
-                        //Console.WriteLine(rows.Attributes["href"].Value);
-                        question.QuestionLink = rows.Attributes["href"].Value;
-                        question.QuestionTitle = rows.InnerHtml.Trim();
-                        question.QuestionQuery = resultQuery;
-                        HtmlWeb sub_web = new HtmlWeb();
-                        HtmlDocument sub_doc = sub_web.Load(sub_url);
-                        if (rows.InnerHtml.Trim().StartsWith("Q"))
-                        {
-                            if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]") != null)
-                            {
-
-                                foreach (HtmlNode sub_node in sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer accepted-answer\"]"))
-                                {
-                                    if (sub_node == null)
-                                        Console.WriteLine("debug");
-                                    else
-                                    {
-                                        
-                                        foreach (HtmlNode sub_node2 in sub_node.SelectNodes(".//div [@class=\"post-text\"]"))
-                                        {
-                                            if (sub_node2 == null)
-                                                Console.WriteLine("debug");
-                                            else
-                                            {
-                                                foreach (HtmlNode sub_node3 in sub_node2.SelectNodes(".//p"))
-                                                {
-                                                    if (sub_node3 == null)
-                                                        Console.WriteLine("debug");
-                                                    else
-                                                    {
-
-                                                        
-                                                    }
-
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-
-
-                        if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
-                        {
-                            foreach (HtmlNode sub_node in sub_doc.DocumentNode.SelectNodes(".//div [@class=\"question\"]"))
-                            {
-                                foreach (HtmlNode sub_node2 in sub_node.SelectNodes(".//div [@class=\"post-text\"]"))
-                                {
-                                    foreach (HtmlNode sub_node3 in sub_node2.SelectNodes(".//p"))
-                                    {
-                                        if (question.QuestionText == null)
-                                            question.QuestionText = sub_node3.InnerHtml;
-                                        else
-                                            question.QuestionText += " " + sub_node3.InnerHtml;
-                                    }
-                                }
-
-
-                            }
-                            Console.WriteLine(  "s");
-                        }
-
-                        if (rows.InnerHtml.Trim().StartsWith("Q"))
-                        {
-                            string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
-                            using (SqlConnection conn = new SqlConnection(connString))
-                            {
-                                conn.Open();
-
-                                if (conn.State != System.Data.ConnectionState.Open)
-                                {
-                                    Console.WriteLine("Error in opening database connection!");
-                                    return;
-                                }
-
-                                using (SqlCommand cmd = new SqlCommand("INSERT INTO Questions (QuestionTitle, QuestionLink, QuestionText, QuestionQuery) VALUES (@title, @link, @text, @query)", conn))
-                                {
-                                    SqlParameter qTitle = new SqlParameter();
-                                    qTitle.ParameterName = "@title";
-                                    string strip = question.QuestionTitle;
-                                    strip = strip.Substring(3);
-                                    question.QuestionTitle = strip;
-                                    qTitle.Value = question.QuestionTitle;
-
-                                    SqlParameter qLink = new SqlParameter();
-                                    qLink.ParameterName = "@link";
-                                    qLink.Value = question.QuestionLink;
-
-                                    SqlParameter qText = new SqlParameter();
-                                    qText.ParameterName = "@text";
-                                    string trunc = question.QuestionText;
-
-                                    if (trunc.Length > 1000)
-                                    {
-                                        trunc = trunc.Substring(0, 1000);
-                                    }
-
-                                    question.QuestionText = trunc;
-                                    qText.Value = question.QuestionText;
-
-                                    SqlParameter qQuery = new SqlParameter();
-                                    qQuery.ParameterName = "@query";
-                                    qQuery.Value = question.QuestionQuery;
-
-                                    cmd.Parameters.Add(qTitle);
-                                    cmd.Parameters.Add(qLink);
-                                    cmd.Parameters.Add(qText);
-                                    cmd.Parameters.Add(qQuery);
-                                    cmd.ExecuteNonQuery();
-                                    conn.Close();
-                                }
-                            }
-                        }
-                       
-                    }
+                    CP_Object CP = new CP_Object();
+                    CP.title = node.SelectSingleNode(".//span [@class=\"title\"]").InnerText;
+                    CP.link = "www.codeproject.com/" +
+                        node.SelectSingleNode(".//a").Attributes["href"].Value;
+                    char[] delimCharFirst = { '=' };
+                    string[] grabRating =
+                        node.SelectSingleNode(".//div [@class=\"nowrap rating-stars-small\"]")
+                            .OuterHtml.Split(delimCharFirst);
+                    string getRatingContent = grabRating[2].TrimStart();
+                    char[] delimCharSecond = { ' ' };
+                    char[] delimCharThird = { '(' };
+                    string[] ratingAfterSplit = getRatingContent.Split(delimCharSecond);
+                    string[] votesSplit = ratingAfterSplit[1].Split(delimCharThird);
+                    CP.rating = float.Parse(ratingAfterSplit[0]);
+                    CP.votes = Convert.ToInt32(votesSplit[1]);
+                    CP.summary = node.SelectSingleNode(".//div [@class=\"summary\"]").InnerText;
+                    CP.query = query;
+                    InsertIntoDB(CP);
                 }
+                
             }
-            else
-            {
-                foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div [@class=\"question-summary\"]"))
-                {
-                    Console.WriteLine(node.InnerHtml);
-                }
-            }*/
         }
     }
 

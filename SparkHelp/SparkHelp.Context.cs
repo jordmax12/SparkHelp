@@ -26,8 +26,9 @@ namespace SparkHelp
         }
     
         public virtual DbSet<CheckedAnswer> CheckedAnswers { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<UncheckedAnswer> UncheckedAnswers { get; set; }
         public virtual DbSet<MSDN_table> MSDN_table { get; set; }
+        public virtual DbSet<CodeProject> CodeProjects { get; set; }
+        public virtual DbSet<StackOverflow> StackOverflows { get; set; }
     }
 }

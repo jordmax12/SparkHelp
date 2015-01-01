@@ -175,6 +175,9 @@
     <Compile Include="CheckedAnswer.cs">
       <DependentUpon>SparkHelp.tt</DependentUpon>
     </Compile>
+    <Compile Include="CodeProject.cs">
+      <DependentUpon>SparkHelp.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -182,6 +185,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CP_Object.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSDN_Object.cs" />
@@ -190,9 +194,6 @@
       <DependentUpon>SparkHelp.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Question.cs">
-      <DependentUpon>SparkHelp.tt</DependentUpon>
-    </Compile>
     <Compile Include="SparkHelp.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -207,6 +208,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SparkHelp.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="StackOverflow.cs">
+      <DependentUpon>SparkHelp.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="UncheckedAnswer.cs">
