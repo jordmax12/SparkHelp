@@ -133,7 +133,7 @@ namespace SparkHelp.Controllers
                 //check if unity is checked
                 if (U_count == 0)
                 {
-                    GetUnityData(resultQuery);
+                   // GetUnityData(resultQuery);
                 }
 
                 grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
