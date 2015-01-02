@@ -13,6 +13,7 @@
         <AssociationConnector Association="SparkHelp_dbModel.FK__CheckedAn__Quest__34C8D9D11" />
         <AssociationConnector Association="SparkHelp_dbModel.FK__MSDN_tabl__Quest__4F7CD00D1" />
         <AssociationConnector Association="SparkHelp_dbModel.FK__Unchecked__Quest__37A5467C1" />
+        <EntityTypeShape EntityType="SparkHelp_dbModel.Unity3D" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

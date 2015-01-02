@@ -58,5 +58,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Unity3D">
+      <EntityTypeMapping TypeName="SparkHelp_dbModel.Unity3D">
+        <MappingFragment StoreEntitySet="Unity3D">
+          <ScalarProperty Name="CheckedAnswer" ColumnName="CheckedAnswer" />
+          <ScalarProperty Name="Query" ColumnName="Query" />
+          <ScalarProperty Name="Snippet" ColumnName="Snippet" />
+          <ScalarProperty Name="Link" ColumnName="Link" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

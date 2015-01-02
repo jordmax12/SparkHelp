@@ -38,6 +38,7 @@
       <End Role="StackOverflow" EntitySet="StackOverflows" />
       <End Role="UncheckedAnswer" EntitySet="UncheckedAnswers" />
     </AssociationSet>
+    <EntitySet Name="Unity3D" EntityType="SparkHelp_dbModel.Unity3D" />
   </EntityContainer>
   <EntityType Name="MSDN_table">
     <Key>
@@ -113,4 +114,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Unity3D">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Link" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Snippet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Query" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="CheckedAnswer" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

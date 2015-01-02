@@ -61,13 +61,15 @@ namespace SparkHelp.Controllers
 
 
 
-                
+                //GetUnityData(resultQuery);
                 var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
                 var so_count = grabQuestions.ToList().Count;
                 var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
                 var msdn_count = grabMSDN.ToList().Count;
                 var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
                 var cp_count = grabCP.ToList().Count;
+                var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
+                var U_count = grabUnity.ToList().Count;
 
                 int x = 0;
                 int y = 0;
@@ -107,28 +109,31 @@ namespace SparkHelp.Controllers
                 List<StackOverflow> finalStack = new List<StackOverflow>();
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
                 List<CodeProject> finalCP = new List<CodeProject>();
+                List<Unity3D> finalUnity= new List<Unity3D>();
                 string prevMSDNString = "";
                 string prevSOstring = "";
                 string prevCPstring = "";
+                string prevUnitystring = "";
+
                 if (so_count == 0)
                 {
                     GetStackData(resultQuery);
-
-                
                 }
 
                 if (msdn_count == 0)
                 {
                     GetMSDNData(resultQuery);
-
-                
                 }
 
                 if (cp_count == 0)
                 {
                     GetCPData(resultQuery);
+                }
 
-
+                //check if unity is checked
+                if (U_count == 0)
+                {
+                    GetUnityData(resultQuery);
                 }
 
                 grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
@@ -159,11 +164,21 @@ namespace SparkHelp.Controllers
                     prevCPstring = item.Title.Trim();
                 }
 
+                grabUnity = db.Unity3D.Where(u => u.Query == resultQuery);
+                foreach (var item in grabUnity)
+                {
+                    if (item.Title.Trim() != prevUnitystring)
+                        finalUnity.Add(item);
+
+                    prevUnitystring = item.Title.Trim();
+                }
+
                 var grab_all =
                  from m in finalMSDN
                  join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
                  join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                 select new ResultsViewModel { stack = s, msdn = m, CP = c};
+                 join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                 select new ResultsViewModel { stack = s, msdn = m, CP = c, unity = u};
 
                 return View(grab_all.ToList());
                 //.ToPagedList(page ?? 1, 8)
@@ -330,6 +345,64 @@ namespace SparkHelp.Controllers
             }
         }
 
+        public void InsertIntoDB(Unity_Object obj)
+        {
+            string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                if (conn.State != System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("Error in opening database connection!");
+                    return;
+                }
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "INSERT INTO Unity3D (Title, Link, Snippet, Query, CheckedAnswer) VALUES (@title, @link, @snippet, @query, @canswer)",
+                            conn))
+                {
+                    SqlParameter cTitle = new SqlParameter();
+                    cTitle.ParameterName = "@title";
+                    cTitle.Value = obj.title;
+
+                    SqlParameter cLink = new SqlParameter();
+                    cLink.ParameterName = "@link";
+                    cLink.Value = obj.link;
+
+                    SqlParameter uSnippet = new SqlParameter();
+                    uSnippet.ParameterName = "@snippet";
+                    uSnippet.Value = obj.snippet;
+
+                    SqlParameter cQuery = new SqlParameter();
+                    cQuery.ParameterName = "@query";
+                    cQuery.Value = obj.query;
+
+                    SqlParameter uCAnswer = new SqlParameter();
+                    uCAnswer.ParameterName = "@canswer";
+                    uCAnswer.Value = "null";
+
+                    if (obj.checkedAnswer != null)
+                    {
+                        uCAnswer.ParameterName = "@canswer";
+                        obj.checkedAnswer = Truncate(obj.checkedAnswer, 4000);
+                        uCAnswer.Value = obj.checkedAnswer;
+                    }
+
+
+
+
+                    cmd.Parameters.Add(cTitle);
+                    cmd.Parameters.Add(cLink);
+                    cmd.Parameters.Add(uSnippet);
+                    cmd.Parameters.Add(cQuery);
+                    cmd.Parameters.Add(uCAnswer);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
         public void GetMSDNData(string query)
         {
             string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query + "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
@@ -440,6 +513,63 @@ namespace SparkHelp.Controllers
                 }
                 
             }
+        }
+
+        public void GetUnityData(string query)
+        {
+            string url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyARl7587QeTqdMqP1rFKVj2UuNlrtoFsak&cx=003540131153181508748:oa0em0h_kv0&q=" + query + "&alt=json";
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var response = (HttpWebResponse)request.GetResponse();
+            var reader = new StreamReader(response.GetResponseStream());
+            var objText = reader.ReadToEnd();
+
+            doc.LoadHtml(objText);
+
+            //dynamic obj = JObject.Parse(objText);
+            //string query2 = obj.query.results;
+
+            dynamic data = JObject.Parse(objText);
+            JArray test = data.items;
+
+            if (test != null)
+            {
+                foreach (var item in test)
+                {
+                    Unity_Object UO = new Unity_Object();
+                    UO.title = item.Value<string>("title");
+                    UO.link = item.Value<string>("link");
+                    UO.snippet = item.Value<string>("snippet");
+                    UO.query = query;
+
+
+                    HtmlWeb sub_web = new HtmlWeb();
+                    HtmlDocument sub_doc = sub_web.Load(UO.link);
+
+
+
+                    if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer full\"]") != null)
+                    {
+                        UO.checkedAnswer =
+                            sub_doc.DocumentNode.SelectSingleNode("//div [@class=\"answer full\"]")
+                                .SelectSingleNode(".//div [@class=\"answer-body\"]")
+                                .InnerText.TrimStart().TrimEnd();
+
+                    }
+
+                    InsertIntoDB(UO);
+                    Console.WriteLine("debug");
+                }
+            }
+
+
+        }
+
+        public static string Truncate(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
     }
 

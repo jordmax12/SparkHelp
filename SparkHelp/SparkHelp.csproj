@@ -190,6 +190,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MSDN_Object.cs" />
     <Compile Include="Models\Stack_Object.cs" />
+    <Compile Include="Models\Unity_Object.cs" />
     <Compile Include="MSDN_table.cs">
       <DependentUpon>SparkHelp.tt</DependentUpon>
     </Compile>
@@ -214,6 +215,9 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="UncheckedAnswer.cs">
+      <DependentUpon>SparkHelp.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Unity3D.cs">
       <DependentUpon>SparkHelp.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ResultsViewModel.cs" />

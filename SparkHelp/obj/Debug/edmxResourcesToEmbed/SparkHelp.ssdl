@@ -52,6 +52,17 @@
     <Property Name="AnswerText" Type="char" MaxLength="25" />
     <Property Name="AnswerVote" Type="int" />
   </EntityType>
+  <EntityType Name="Unity3D">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Link" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Snippet" Type="nvarchar" MaxLength="500" />
+    <Property Name="Query" Type="nvarchar" MaxLength="75" />
+    <Property Name="CheckedAnswer" Type="nvarchar" MaxLength="4000" />
+  </EntityType>
   <Association Name="FK__CheckedAn__Quest__34C8D9D1">
     <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
     <End Role="CheckedAnswers" Type="Self.CheckedAnswers" Multiplicity="*" />
@@ -94,6 +105,7 @@
     <EntitySet Name="MSDN_table" EntityType="Self.MSDN_table" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StackOverflow" EntityType="Self.StackOverflow" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Unity3D" EntityType="Self.Unity3D" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
       <End Role="StackOverflow" EntitySet="StackOverflow" />
       <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />

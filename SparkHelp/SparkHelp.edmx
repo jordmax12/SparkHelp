@@ -57,6 +57,17 @@
           <Property Name="AnswerText" Type="char" MaxLength="25" />
           <Property Name="AnswerVote" Type="int" />
         </EntityType>
+        <EntityType Name="Unity3D">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Snippet" Type="nvarchar" MaxLength="500" />
+          <Property Name="Query" Type="nvarchar" MaxLength="75" />
+          <Property Name="CheckedAnswer" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
         <Association Name="FK__CheckedAn__Quest__34C8D9D1">
           <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
           <End Role="CheckedAnswers" Type="Self.CheckedAnswers" Multiplicity="*" />
@@ -99,6 +110,7 @@
           <EntitySet Name="MSDN_table" EntityType="Self.MSDN_table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StackOverflow" EntityType="Self.StackOverflow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Unity3D" EntityType="Self.Unity3D" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
             <End Role="StackOverflow" EntitySet="StackOverflow" />
             <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
@@ -154,6 +166,7 @@
             <End Role="StackOverflow" EntitySet="StackOverflows" />
             <End Role="UncheckedAnswer" EntitySet="UncheckedAnswers" />
           </AssociationSet>
+          <EntitySet Name="Unity3D" EntityType="SparkHelp_dbModel.Unity3D" />
         </EntityContainer>
         <EntityType Name="MSDN_table">
           <Key>
@@ -229,6 +242,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Unity3D">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Snippet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Query" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="CheckedAnswer" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -289,6 +313,18 @@
                 <ScalarProperty Name="QuestionLink" ColumnName="QuestionLink" />
                 <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
                 <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Unity3D">
+            <EntityTypeMapping TypeName="SparkHelp_dbModel.Unity3D">
+              <MappingFragment StoreEntitySet="Unity3D">
+                <ScalarProperty Name="CheckedAnswer" ColumnName="CheckedAnswer" />
+                <ScalarProperty Name="Query" ColumnName="Query" />
+                <ScalarProperty Name="Snippet" ColumnName="Snippet" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -39,6 +39,7 @@
                 int index = 0;
                 int index2 = 0;
                 int index3 = 0;
+                int index4 = 0;
                 string prevSOString = "";
             }
             @foreach (var item in Model)
@@ -90,9 +91,9 @@
     </div>
 
     <div class="col-md-12">
-        <br />
+        <br/>
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
-        <br />
+        <br/>
         <ul class="list-results">
 
             @{
@@ -102,7 +103,7 @@
             }
             @foreach (var item in Model)
             {
-                if (item.CP.Title!= prevString2 && index3 < 8)
+                if (item.CP.Title != prevString2 && index3 < 8)
                 {
 
                     <li>
@@ -114,6 +115,36 @@
                 }
 
                 prevString2 = item.CP.Title;
+            }
+
+        </ul>
+    </div>
+
+    <div class="col-md-12">
+        <br />
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">Unity3D</h2>
+        <br />
+        <ul class="list-results">
+
+            @{
+                string prevString3 = "";
+                page = 0;
+                index4 = 0;
+            }
+            @foreach (var item in Model)
+            {
+                if (item.unity.Title != prevString3 && index4 < 8)
+                {
+
+                    <li>
+                        <a href="@item.unity.Link" stzyle="width: auto; height: 72px;">
+                            <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
+                        </a>
+                    </li>
+                    index4++;
+                }
+
+                prevString3 = item.unity.Title;
             }
 
         </ul>

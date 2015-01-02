@@ -10,6 +10,7 @@ namespace SparkHelp.ViewModels
         public StackOverflow stack { get; set; }
         public MSDN_table msdn { get; set; }
         public CodeProject CP { get; set; }
+        public Unity3D unity { get; set; }
         public string title { get; set; }
     }
 }
