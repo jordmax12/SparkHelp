@@ -532,17 +532,33 @@ namespace SparkHelp.Controllers
                 answers: null, body: null, closed: null, migrated: null, notice: null,
                 nottagged: null, tagged: null,
                 title: null, user: null, url: null, views: null, wiki: null).Result;
-            foreach (var question in response.Data.Items)
+
+            if (response.Data.Items != null)
             {
-                Console.WriteLine(question.Title);
                 Stack_Object stackObject = new Stack_Object();
-                stackObject.title = question.Title;
-                stackObject.link = question.Link;
-                stackObject.rating = question.Score;
+                stackObject.title = "null";
+                stackObject.link = "null";
+                stackObject.rating = 0.0f;
                 stackObject.query = query;
-                
+
                 InsertIntoDB(stackObject, "stackoverflow");
             }
+            else
+            {
+                foreach (var question in response.Data.Items)
+                {
+                    Stack_Object stackObject = new Stack_Object();
+                    stackObject.title = question.Title;
+                    stackObject.link = question.Link;
+                    stackObject.rating = question.Score;
+                    stackObject.query = query;
+
+                    InsertIntoDB(stackObject, "stackoverflow");
+                }
+            }
+
+
+
         }
 
         public void GetCPData(string query)
