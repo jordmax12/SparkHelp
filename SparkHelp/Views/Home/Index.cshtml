@@ -46,7 +46,7 @@
             {
                 if (item.stack != null)
                 {
-                    if (item.stack.QuestionTitle != prevSOString && index < 8)
+                    if (item.stack.QuestionTitle != prevSOString && index < 8 && item.stack.QuestionTitle != "null")
                     {
                         string link = "http://www.stackoverflow.com" + @item.stack.QuestionLink;
                         <li>
@@ -79,7 +79,7 @@
             {
                 if (item.msdn != null)
                 {
-                    if (item.msdn.QueryTitle != prevString && index2 < 8)
+                    if (item.msdn.QueryTitle != prevString && index2 < 8 && item.msdn.QueryTitle != "null")
                     {
 
                         <li>
@@ -111,7 +111,7 @@
             {
                 if (item.CP != null)
                 {
-                    if (item.CP.Title != prevString2 && index3 < 8)
+                    if (item.CP.Title != prevString2 && index3 < 8 && item.CP.Title != "null")
                     {
 
                         <li>
@@ -144,7 +144,7 @@
             {
                 if (item.unity != null)
                 {
-                    if (item.unity.Title != prevString3 && index4 < 8)
+                    if (item.unity.Title != prevString3 && index4 < 8 && item.unity.Title != "null")
                     {
 
                         <li>

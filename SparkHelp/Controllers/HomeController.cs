@@ -175,14 +175,28 @@ namespace SparkHelp.Controllers
                 }
 
 
+                if (finalMSDN.Count != 0)
+                {
                     var grab_all =
-                           from m in finalMSDN
-                           join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                           join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                           join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                           select new ResultsViewModel { stack = s, msdn = m, CP = c, unity = u };
+                        from m in finalMSDN
+                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+                        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                        select new ResultsViewModel {stack = s, msdn = m, CP = c, unity = u};
 
                     return View(grab_all.ToList());
+                }
+                else
+                {
+                      var grab_all =
+                        from s in finalStack
+                        join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
+                        join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
+                        select new ResultsViewModel { stack = s, CP = c, unity = u };
+
+                    return View(grab_all.ToList());
+                }
+
                 /*final without stack
                  * var grab_all =
                       from m in finalMSDN
@@ -533,7 +547,7 @@ namespace SparkHelp.Controllers
                 nottagged: null, tagged: null,
                 title: null, user: null, url: null, views: null, wiki: null).Result;
 
-            if (response.Data.Items != null)
+            if (response.Data.Items.Count() == 0)
             {
                 Stack_Object stackObject = new Stack_Object();
                 stackObject.title = "null";
