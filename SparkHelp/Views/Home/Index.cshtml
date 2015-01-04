@@ -44,9 +44,11 @@
             }
             @foreach (var item in Model)
             {
-                if (item.stack.QuestionTitle != prevSOString && index < 8)
+                if (item.stack != null)
                 {
-                    string link = "http://www.stackoverflow.com" + @item.stack.QuestionLink;
+                    if (item.stack.QuestionTitle != prevSOString && index < 8)
+                    {
+                        string link = "http://www.stackoverflow.com" + @item.stack.QuestionLink;
                         <li>
                             <a href="@link" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
@@ -55,6 +57,7 @@
                         index++;
                         prevSOString = item.stack.QuestionTitle;
 
+                    }
                 }
 
             }
@@ -74,18 +77,21 @@
             }
             @foreach (var item in Model)
             {
-                if (item.msdn.QueryTitle != prevString && index2 < 8)
+                if (item.msdn != null)
                 {
+                    if (item.msdn.QueryTitle != prevString && index2 < 8)
+                    {
 
-                    <li>
-                        <a href="@item.msdn.QueryURL" stZyle="width: auto; height: 72px;">
-                            <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
-                        </a>
-                    </li>
-                    index2++;
+                        <li>
+                            <a href="@item.msdn.QueryURL" stzyle="width: auto; height: 72px;">
+                                <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
+                            </a>
+                        </li>
+                        index2++;
+                    }
+
+                    prevString = item.msdn.QueryTitle;
                 }
-
-                prevString = item.msdn.QueryTitle;
             }
         </ul>
     </div>
@@ -103,18 +109,21 @@
             }
             @foreach (var item in Model)
             {
-                if (item.CP.Title != prevString2 && index3 < 8)
+                if (item.CP != null)
                 {
+                    if (item.CP.Title != prevString2 && index3 < 8)
+                    {
 
-                    <li>
-                        <a href="@item.CP.Link" stzyle="width: auto; height: 72px;">
-                            <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
-                        </a>
-                    </li>
-                    index3++;
+                        <li>
+                            <a href="@item.CP.Link" stzyle="width: auto; height: 72px;">
+                                <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
+                            </a>
+                        </li>
+                        index3++;
+                    }
+
+                    prevString2 = item.CP.Title;
                 }
-
-                prevString2 = item.CP.Title;
             }
 
         </ul>
@@ -133,18 +142,21 @@
             }
             @foreach (var item in Model)
             {
-                if (item.unity.Title != prevString3 && index4 < 8)
+                if (item.unity != null)
                 {
+                    if (item.unity.Title != prevString3 && index4 < 8)
+                    {
 
-                    <li>
-                        <a href="@item.unity.Link" stzyle="width: auto; height: 72px;">
-                            <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
-                        </a>
-                    </li>
-                    index4++;
+                        <li>
+                            <a href="@item.unity.Link" stzyle="width: auto; height: 72px;">
+                                <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
+                            </a>
+                        </li>
+                        index4++;
+                    }
+                    prevString3 = item.unity.Title;
                 }
-
-                prevString3 = item.unity.Title;
+                
             }
 
         </ul>

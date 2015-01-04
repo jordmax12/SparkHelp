@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
@@ -173,14 +174,53 @@ namespace SparkHelp.Controllers
                     prevUnitystring = item.Title.Trim();
                 }
 
-                var grab_all =
-                 from m in finalMSDN
-                 join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                 join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                 join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                 select new ResultsViewModel { stack = s, msdn = m, CP = c, unity = u};
 
-                return View(grab_all.ToList());
+                    var grab_all =
+                           from m in finalMSDN
+                           join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                           join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+                           join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                           select new ResultsViewModel { stack = s, msdn = m, CP = c, unity = u };
+
+                    return View(grab_all.ToList());
+                /*final without stack
+                 * var grab_all =
+                      from m in finalMSDN
+                      join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+                      join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                      select new ResultsViewModel { msdn = m, CP = c, unity = u };
+
+                    return View(grab_all.ToList());   
+                 * 
+                 * final without cp 
+                 * var grab_all =
+                        from m in finalMSDN
+                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                        select new ResultsViewModel { stack = s, msdn = m, unity = u };
+
+                    return View(grab_all.ToList());
+                 * 
+                 * final without unity
+                 * var grab_all =
+                        from m in finalMSDN
+                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+                        select new ResultsViewModel { stack = s, msdn = m, CP = c };
+
+                    return View(grab_all.ToList());
+                 * 
+                 * final without msdn
+                 *                     var grab_all =
+                        from s in finalStack
+                        join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
+                        join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
+                        select new ResultsViewModel { stack = s, CP = c, unity = u };
+
+                    return View(grab_all.ToList());
+                 * */
+
+
                 //.ToPagedList(page ?? 1, 8)
             }
             List<ResultsViewModel> emptyList = new List<ResultsViewModel>();
@@ -201,6 +241,7 @@ namespace SparkHelp.Controllers
             return View();
         }
 
+        
        
 
         public void InsertIntoDB(Stack_Object obj, string table)
@@ -311,6 +352,7 @@ namespace SparkHelp.Controllers
                 {
                     SqlParameter cTitle = new SqlParameter();
                     cTitle.ParameterName = "@title";
+                    obj.title = Truncate(obj.title, 200);
                     cTitle.Value = obj.title;
 
                     SqlParameter cLink = new SqlParameter();
@@ -327,6 +369,7 @@ namespace SparkHelp.Controllers
 
                     SqlParameter cSummary = new SqlParameter();
                     cSummary.ParameterName = "@summary";
+                    obj.summary = Truncate(obj.summary, 4000);
                     cSummary.Value = obj.summary;
 
                     SqlParameter cQuery = new SqlParameter();
@@ -409,33 +452,55 @@ namespace SparkHelp.Controllers
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            var response = (HttpWebResponse)request.GetResponse();
-            var reader = new StreamReader(response.GetResponseStream());
-            var objText = reader.ReadToEnd();
 
-            doc.LoadHtml(objText);
-
-            //dynamic obj = JObject.Parse(objText);
-            //string query2 = obj.query.results;
-
-            dynamic data = JObject.Parse(objText);
-            JArray test = data.data.results;
-
-            List<string> parsedJArray = new List<string>();
-            List<string> parsedTitles = new List<string>();
-
-            foreach (var item in test)
+            try
             {
-                MSDN_Object msdn_result_object = new MSDN_Object();
-                msdn_result_object.title = item.Value<string>("title");
-                msdn_result_object.description = item.Value<string>("description");
-                msdn_result_object.url = item.Value<string>("display_url");
-                msdn_result_object.query = resultQuery;
-                //need to get rating
-                //msdn_result_object.rating = test[idx].First.Value<float>("rating");
-                InsertIntoDB(msdn_result_object, "msdn");
-                //Console.WriteLine("debug");
+                var response = (HttpWebResponse)request.GetResponse();
+                var reader = new StreamReader(response.GetResponseStream());
+                var objText = reader.ReadToEnd();
+
+                doc.LoadHtml(objText);
+
+                //dynamic obj = JObject.Parse(objText);
+                //string query2 = obj.query.results;
+
+                dynamic data = JObject.Parse(objText);
+                JArray test = data.data.results;
+
+                if (test == null)
+                {
+                    MSDN_Object msdn_result_object = new MSDN_Object();
+                    msdn_result_object.title = "null";
+                    msdn_result_object.description = "null";
+                    msdn_result_object.url = "null";
+                    msdn_result_object.query = resultQuery;
+                    InsertIntoDB(msdn_result_object, "msdn");
+
+                }
+                else
+                {
+                    foreach (var item in test)
+                    {
+                        MSDN_Object msdn_result_object = new MSDN_Object();
+                        msdn_result_object.title = item.Value<string>("title");
+                        msdn_result_object.description = item.Value<string>("description");
+                        msdn_result_object.url = item.Value<string>("display_url");
+                        msdn_result_object.query = resultQuery;
+                        //need to get rating
+                        //msdn_result_object.rating = test[idx].First.Value<float>("rating");
+                        InsertIntoDB(msdn_result_object, "msdn");
+                    }
+                }
             }
+            catch (Exception)
+            {
+                Console.WriteLine("error");
+            }
+
+           
+
+
+
 
             //HtmlDocument doc = new HtmlDocument();
             //HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
@@ -477,7 +542,6 @@ namespace SparkHelp.Controllers
                 stackObject.query = query;
                 
                 InsertIntoDB(stackObject, "stackoverflow");
-
             }
         }
 
@@ -495,73 +559,135 @@ namespace SparkHelp.Controllers
                     CP_Object CP = new CP_Object();
                     CP.title = node.SelectSingleNode(".//span [@class=\"title\"]").InnerText;
                     CP.link = "www.codeproject.com/" +
-                        node.SelectSingleNode(".//a").Attributes["href"].Value;
-                    char[] delimCharFirst = { '=' };
+                              node.SelectSingleNode(".//a").Attributes["href"].Value;
+                    char[] delimCharFirst = {'='};
                     string[] grabRating =
                         node.SelectSingleNode(".//div [@class=\"nowrap rating-stars-small\"]")
                             .OuterHtml.Split(delimCharFirst);
                     string getRatingContent = grabRating[2].TrimStart();
-                    char[] delimCharSecond = { ' ' };
-                    char[] delimCharThird = { '(' };
+                    char[] delimCharSecond = {' '};
+                    char[] delimCharThird = {'('};
                     string[] ratingAfterSplit = getRatingContent.Split(delimCharSecond);
                     string[] votesSplit = ratingAfterSplit[1].Split(delimCharThird);
-                    CP.rating = float.Parse(ratingAfterSplit[0]);
-                    CP.votes = Convert.ToInt32(votesSplit[1]);
+                    try
+                    {
+                        CP.rating = float.Parse(ratingAfterSplit[0]);
+                    }
+                    catch
+                    {
+                        CP.rating = 0.0f;
+                    }
+                    try
+                    {
+                        CP.votes = Convert.ToInt32(votesSplit[1]);
+                    }
+                    catch
+                    {
+                        CP.votes = 0;
+                    }
                     CP.summary = node.SelectSingleNode(".//div [@class=\"summary\"]").InnerText;
                     CP.query = query;
                     InsertIntoDB(CP);
                 }
-                
+
+            }
+            else
+            {
+                CP_Object CP = new CP_Object();
+                CP.title = "null";
+                CP.link = "null";
+                CP.rating = 0.0f;
+                CP.votes = 0;
+                CP.summary = "null";
+                CP.query = query;
+                InsertIntoDB(CP);
             }
         }
 
         public void GetUnityData(string query)
         {
+            bool success = false;
             string url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyARl7587QeTqdMqP1rFKVj2UuNlrtoFsak&cx=003540131153181508748:oa0em0h_kv0&userIp=104.45.129.178&q=" + query + "&alt=json";
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            var response = (HttpWebResponse)request.GetResponse();
-            var reader = new StreamReader(response.GetResponseStream());
-            var objText = reader.ReadToEnd();
-
-            doc.LoadHtml(objText);
-
-            //dynamic obj = JObject.Parse(objText);
-            //string query2 = obj.query.results;
-
-            dynamic data = JObject.Parse(objText);
-            JArray test = data.items;
-
-            if (test != null)
+            try
             {
-                foreach (var item in test)
+                var response = (HttpWebResponse)request.GetResponse();
+                var reader = new StreamReader(response.GetResponseStream());
+                var objText = reader.ReadToEnd();
+                success = true;
+                doc.LoadHtml(objText);
+
+                //dynamic obj = JObject.Parse(objText);
+                //string query2 = obj.query.results;
+
+                dynamic data = JObject.Parse(objText);
+                JArray test = data.items;
+
+                if (test != null)
+                {
+                    foreach (var item in test)
+                    {
+                        Unity_Object UO = new Unity_Object();
+                        UO.title = item.Value<string>("title");
+                        UO.link = item.Value<string>("link");
+                        UO.snippet = item.Value<string>("snippet");
+                        UO.query = query;
+
+
+                        HtmlWeb sub_web = new HtmlWeb();
+                        HtmlDocument sub_doc = sub_web.Load(UO.link);
+
+
+
+                        if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer full\"]") != null)
+                        {
+                            UO.checkedAnswer =
+                                sub_doc.DocumentNode.SelectSingleNode("//div [@class=\"answer full\"]")
+                                    .SelectSingleNode(".//div [@class=\"answer-body\"]")
+                                    .InnerText.TrimStart().TrimEnd();
+
+                        }
+                        else
+                        {
+                            UO.checkedAnswer = "null";
+                        }
+
+                        InsertIntoDB(UO);
+                        Console.WriteLine("debug");
+                    }
+                }
+                else
                 {
                     Unity_Object UO = new Unity_Object();
-                    UO.title = item.Value<string>("title");
-                    UO.link = item.Value<string>("link");
-                    UO.snippet = item.Value<string>("snippet");
+                    UO.title = "null";
+                    UO.link = "null";
+                    UO.snippet = "null";
                     UO.query = query;
-
-
-                    HtmlWeb sub_web = new HtmlWeb();
-                    HtmlDocument sub_doc = sub_web.Load(UO.link);
-
-
-
-                    if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer full\"]") != null)
-                    {
-                        UO.checkedAnswer =
-                            sub_doc.DocumentNode.SelectSingleNode("//div [@class=\"answer full\"]")
-                                .SelectSingleNode(".//div [@class=\"answer-body\"]")
-                                .InnerText.TrimStart().TrimEnd();
-
-                    }
-
+                    UO.checkedAnswer = "null";
                     InsertIntoDB(UO);
-                    Console.WriteLine("debug");
+
                 }
             }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError &&
+                    ex.Response != null)
+                {
+                    success = false;
+                    Unity_Object UO = new Unity_Object();
+                    UO.title = "null";
+                    UO.link = "null";
+                    UO.snippet = "null";
+                    UO.query = query;
+                    UO.checkedAnswer = "null";
+                    InsertIntoDB(UO);
+                }
+            }
+
+
+            Console.WriteLine(  "debug");
 
 
         }
