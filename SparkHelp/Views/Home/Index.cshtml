@@ -46,7 +46,7 @@
             {
                 if (item.stack != null)
                 {
-                    if (item.stack.QuestionTitle != prevSOString && index < 8 && item.stack.QuestionTitle != "null")
+                    if (item.stack.QuestionTitle != prevSOString && index < 8 && item.stack.QuestionTitle.Trim() != "null")
                     {
                         string link = "http://www.stackoverflow.com" + @item.stack.QuestionLink;
                         <li>
