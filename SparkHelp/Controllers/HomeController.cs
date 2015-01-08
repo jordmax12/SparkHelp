@@ -94,22 +94,34 @@ namespace SparkHelp.Controllers
 
 
                 //MSDN
-                var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
-                var msdn_count = grabMSDN.ToList().Count;
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
-                string prevMSDNString = "";
-                if (msdn_count == 0)
+                if (MSDN != false && MSDN != null)
                 {
-                    GetMSDNData(resultQuery);
-                }
+                    var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
+                    var msdn_count = grabMSDN.ToList().Count;
+                    
+                    string prevMSDNString = "";
+                    if (msdn_count == 0)
+                    {
+                        GetMSDNData(resultQuery);
+                    }
 
-                grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
-                foreach (var item in grabMSDN)
+                    grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
+                    foreach (var item in grabMSDN)
+                    {
+                        if (item.QueryTitle.Trim() != prevMSDNString)
+                            finalMSDN.Add(item);
+
+                        prevMSDNString = item.QueryTitle.Trim();
+                    }
+                } else if (MSDN == false)
                 {
-                    if (item.QueryTitle.Trim() != prevMSDNString)
-                        finalMSDN.Add(item);
-
-                    prevMSDNString = item.QueryTitle.Trim();
+                    MSDN_table MSDN_temp = new MSDN_table();
+                    MSDN_temp.QueryTitle = "null";
+                    MSDN_temp.QuerySearch = resultQuery;
+                    MSDN_temp.QueryDescription = "null";
+                    MSDN_temp.QueryURL = "null";
+                    finalMSDN.Add(MSDN_temp);
                 }
 
                 //CP
