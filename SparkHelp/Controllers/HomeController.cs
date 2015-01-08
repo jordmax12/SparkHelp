@@ -61,101 +61,47 @@ namespace SparkHelp.Controllers
                     j++;
                 }
 
+                //STACKOVERFLOW
+                List<StackOverflow> finalStack = new List<StackOverflow>();
+                if (Stack != false && Stack != null)
+                {
+                    var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
+                    var so_count = grabQuestions.ToList().Count;
+                    
+                    string prevSOstring = "";
+
+                    if (so_count == 0)
+                    {
+                        GetStackData(resultQuery);
+                    }
+
+                    grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
+                    foreach (var item in grabQuestions)
+                    {
+                        if (item.QuestionTitle.Trim() != prevSOstring)
+                            finalStack.Add(item);
+
+                        prevSOstring = item.QuestionTitle.Trim();
+                    }
+                } else if (Stack == false)
+                {
+                    StackOverflow stackObject = new StackOverflow();
+                    stackObject.QuestionTitle = "null";
+                    stackObject.QuestionLink = "null";
+                    stackObject.QuestionQuery = resultQuery;
+                    finalStack.Add(stackObject);
+                }
 
 
-                //GetUnityData(resultQuery);
-                var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
-                var so_count = grabQuestions.ToList().Count;
+                //MSDN
                 var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
                 var msdn_count = grabMSDN.ToList().Count;
-                var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
-                var cp_count = grabCP.ToList().Count;
-                var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
-                var U_count = grabUnity.ToList().Count;
-                var grabW3 = db.W3.Where(w => w.Query == resultQuery).Distinct();
-                var W_count = grabW3.ToList().Count;
-
-                int x = 0;
-                int y = 0;
-                string new_so_query = "";
-                char[] so_delims = {'+'};
-                string[] so_query = resultQuery.Split(so_delims);
-                foreach (string s in so_query)
-                {
-                    if (s[x] == s[0])
-                        new_so_query += s;
-                    else
-                        break;
-                    x++;
-                }
-
-                string new_msdn_query = "";
-                char[] msdn_delims = {'%'};
-                string[] msdn_query = msdn_resultQuery.Split(msdn_delims);
-                foreach (string s in msdn_query)
-                {
-                    if (s[y] == s[0])
-                        new_msdn_query += s;
-                    else
-                        break;
-                    y++;
-                }
-           
-
-
-                /*if(so_count == 0)
-                    GetStackData(resultQuery);*/
-
-                    
-
-                //var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
-                //var msdn_count = grabMSDN.ToList().Count;
-                List<StackOverflow> finalStack = new List<StackOverflow>();
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
-                List<CodeProject> finalCP = new List<CodeProject>();
-                List<Unity3D> finalUnity= new List<Unity3D>();
-                List<W3> finalW3 = new List<W3>();
                 string prevMSDNString = "";
-                string prevSOstring = "";
-                string prevCPstring = "";
-                string prevUnitystring = "";
-                string prevW3string = "";
-
-                if (so_count == 0)
-                {
-                    GetStackData(resultQuery);
-                }
-
                 if (msdn_count == 0)
                 {
                     GetMSDNData(resultQuery);
                 }
-
-                if (cp_count == 0)
-                {
-                    GetCPData(resultQuery);
-                }
-
-                //check if unity is checked
-                if (U_count == 0)
-                {
-                   GetUnityData(resultQuery);
-                }
-
-                if (W_count == 0)
-                {
-                    GetW3Data(resultQuery);
-                }
-
-                grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
-                foreach (var item in grabQuestions)
-                {
-                    if (item.QuestionTitle.Trim() != prevSOstring)
-                        finalStack.Add(item);
-
-                    prevSOstring = item.QuestionTitle.Trim();
-                }
-
 
                 grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
                 foreach (var item in grabMSDN)
@@ -166,45 +112,119 @@ namespace SparkHelp.Controllers
                     prevMSDNString = item.QueryTitle.Trim();
                 }
 
-                grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery);
-                foreach (var item in grabCP)
+                //CP
+                List<CodeProject> finalCP = new List<CodeProject>();
+                if (CodeProject != false && CodeProject != null)
                 {
-                    if (item.Title.Trim() != prevCPstring)
-                        finalCP.Add(item);
+                    var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
+                    var cp_count = grabCP.ToList().Count;
+                    
+                    string prevCPstring = "";
+                    if (cp_count == 0)
+                    {
+                        GetCPData(resultQuery);
+                    }
 
-                    prevCPstring = item.Title.Trim();
+                    grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery);
+                    foreach (var item in grabCP)
+                    {
+                        if (item.Title.Trim() != prevCPstring)
+                            finalCP.Add(item);
+
+                        prevCPstring = item.Title.Trim();
+                    }
+                } else if (CodeProject == false)
+                {
+                    CodeProject CP = new CodeProject();
+                    CP.Title = "null";
+                    CP.Link = "null";
+                    CP.Rating = 0.0f;
+                    CP.Votes = 0;
+                    CP.Summary = "null";
+                    CP.QuestionQuery = resultQuery;
+                    finalCP.Add(CP);
                 }
 
-                grabUnity = db.Unity3D.Where(u => u.Query == resultQuery);
-                foreach (var item in grabUnity)
+                //UNITY
+                List<Unity3D> finalUnity = new List<Unity3D>();
+                if (Unity3D != false && Unity3D != null)
                 {
-                    if (item.Title.Trim() != prevUnitystring)
-                        finalUnity.Add(item);
+                    var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
+                    var U_count = grabUnity.ToList().Count;
+                    
+                    string prevUnitystring = "";
+                    if (U_count == 0)
+                    {
+                        GetUnityData(resultQuery);
+                    }
 
-                    prevUnitystring = item.Title.Trim();
+                    grabUnity = db.Unity3D.Where(u => u.Query == resultQuery);
+                    foreach (var item in grabUnity)
+                    {
+                        if (item.Title.Trim() != prevUnitystring)
+                            finalUnity.Add(item);
+
+                        prevUnitystring = item.Title.Trim();
+                    }
+                } else if (Unity3D == false)
+                {
+                    Unity3D UO = new Unity3D();
+                    UO.Title = "null";
+                    UO.Link = "null";
+                    UO.Snippet = "null";
+                    UO.Query = resultQuery;
+                    UO.CheckedAnswer = "null";
+                    finalUnity.Add(UO);
                 }
 
-                grabW3 = db.W3.Where(w => w.Query == resultQuery);
-                foreach (var item in grabW3)
-                {
-                    if (item.Title.Trim() != prevW3string)
-                        finalW3.Add(item);
 
-                    prevW3string = item.Title.Trim();
+
+                //W3
+                List<W3> finalW3 = new List<W3>();
+                if (W3 != false && W3 != null)
+                {
+                    var grabW3 = db.W3.Where(w => w.Query == resultQuery).Distinct();
+                    var W_count = grabW3.ToList().Count;
+                    
+                    string prevW3string = "";
+                    if (W_count == 0)
+                    {
+                        GetW3Data(resultQuery);
+                    }
+
+                    grabW3 = db.W3.Where(w => w.Query == resultQuery);
+                    foreach (var item in grabW3)
+                    {
+                        if (item.Title.Trim() != prevW3string)
+                            finalW3.Add(item);
+
+                        prevW3string = item.Title.Trim();
+                    }
+                } else if (W3 == false)
+                {
+                    W3 W3_temp = new W3();
+                    W3_temp.Title = "null";
+                    W3_temp.Link = "null";
+                    W3_temp.Snippet = "null";
+                    W3_temp.Query = resultQuery;
+                    finalW3.Add(W3_temp);
                 }
+
+
 
 
                 if (finalMSDN.Count != 0)
                 {
-                    var grab_all =
-                        from m in finalMSDN
-                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                        join w in finalW3 on m.QuerySearch.Trim() equals w.Query.Trim()
-                        select new ResultsViewModel {stack = s, msdn = m, CP = c, unity = u, w3 = w};
+                        var grab_all =
+                            from m in finalMSDN
+                            join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+                            join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+                            join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+                            join w in finalW3 on m.QuerySearch.Trim() equals w.Query.Trim()
+                            select new ResultsViewModel {stack = s, msdn = m, CP = c, unity = u, w3 = w};
 
-                    return View(grab_all.ToList());
+                        return View(grab_all.ToList());
+                    
                 }
                 else
                 {
@@ -218,45 +238,7 @@ namespace SparkHelp.Controllers
                     return View(grab_all.ToList());
                 }
 
-                /*final without stack
-                 * var grab_all =
-                      from m in finalMSDN
-                      join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                      join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                      select new ResultsViewModel { msdn = m, CP = c, unity = u };
 
-                    return View(grab_all.ToList());   
-                 * 
-                 * final without cp 
-                 * var grab_all =
-                        from m in finalMSDN
-                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                        select new ResultsViewModel { stack = s, msdn = m, unity = u };
-
-                    return View(grab_all.ToList());
-                 * 
-                 * final without unity
-                 * var grab_all =
-                        from m in finalMSDN
-                        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-                        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-                        select new ResultsViewModel { stack = s, msdn = m, CP = c };
-
-                    return View(grab_all.ToList());
-                 * 
-                 * final without msdn
-                 *                     var grab_all =
-                        from s in finalStack
-                        join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
-                        join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
-                        select new ResultsViewModel { stack = s, CP = c, unity = u };
-
-                    return View(grab_all.ToList());
-                 * */
-
-
-                //.ToPagedList(page ?? 1, 8)
             }
             List<ResultsViewModel> emptyList = new List<ResultsViewModel>();
             return View(emptyList);
@@ -854,3 +836,43 @@ namespace SparkHelp.Controllers
 
 
 }
+
+/*final without stack
+ * var grab_all =
+      from m in finalMSDN
+      join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+      join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+      select new ResultsViewModel { msdn = m, CP = c, unity = u };
+
+    return View(grab_all.ToList());   
+ * 
+ * final without cp 
+ * var grab_all =
+        from m in finalMSDN
+        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
+        select new ResultsViewModel { stack = s, msdn = m, unity = u };
+
+    return View(grab_all.ToList());
+ * 
+ * final without unity
+ * var grab_all =
+        from m in finalMSDN
+        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
+        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
+        select new ResultsViewModel { stack = s, msdn = m, CP = c };
+
+    return View(grab_all.ToList());
+ * 
+ * final without msdn
+ *                     var grab_all =
+        from s in finalStack
+        join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
+        join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
+        select new ResultsViewModel { stack = s, CP = c, unity = u };
+
+    return View(grab_all.ToList());
+ * */
+
+
+//.ToPagedList(page ?? 1, 8)
