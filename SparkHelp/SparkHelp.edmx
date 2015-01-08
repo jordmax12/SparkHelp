@@ -19,12 +19,12 @@
             <PropertyRef Name="QuestionID" />
           </Key>
           <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Rating" Type="float" />
           <Property Name="Votes" Type="int" />
           <Property Name="Summary" Type="nvarchar" MaxLength="4000" />
-          <Property Name="QuestionQuery" Type="nvarchar" MaxLength="100" />
+          <Property Name="QuestionQuery" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="MSDN_table">
           <Key>
@@ -62,11 +62,21 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Link" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Snippet" Type="nvarchar" MaxLength="500" />
-          <Property Name="Query" Type="nvarchar" MaxLength="75" />
+          <Property Name="Query" Type="nvarchar" MaxLength="200" />
           <Property Name="CheckedAnswer" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
+        <EntityType Name="W3">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Snippet" Type="nvarchar" MaxLength="500" />
+          <Property Name="Query" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK__CheckedAn__Quest__34C8D9D1">
           <End Role="StackOverflow" Type="Self.StackOverflow" Multiplicity="1" />
@@ -111,6 +121,7 @@
           <EntitySet Name="StackOverflow" EntityType="Self.StackOverflow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UncheckedAnswers" EntityType="Self.UncheckedAnswers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Unity3D" EntityType="Self.Unity3D" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="W3" EntityType="Self.W3" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__CheckedAn__Quest__34C8D9D1" Association="Self.FK__CheckedAn__Quest__34C8D9D1">
             <End Role="StackOverflow" EntitySet="StackOverflow" />
             <End Role="CheckedAnswers" EntitySet="CheckedAnswers" />
@@ -167,6 +178,7 @@
             <End Role="UncheckedAnswer" EntitySet="UncheckedAnswers" />
           </AssociationSet>
           <EntitySet Name="Unity3D" EntityType="SparkHelp_dbModel.Unity3D" />
+          <EntitySet Name="W3" EntityType="SparkHelp_dbModel.W3" />
         </EntityContainer>
         <EntityType Name="MSDN_table">
           <Key>
@@ -185,12 +197,12 @@
             <PropertyRef Name="QuestionID" />
           </Key>
           <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Rating" Type="Double" />
           <Property Name="Votes" Type="Int32" />
           <Property Name="Summary" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="QuestionQuery" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionQuery" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="StackOverflow">
           <Key>
@@ -247,11 +259,21 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Link" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Snippet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Query" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="Query" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CheckedAnswer" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="W3">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Snippet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Query" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -320,6 +342,17 @@
             <EntityTypeMapping TypeName="SparkHelp_dbModel.Unity3D">
               <MappingFragment StoreEntitySet="Unity3D">
                 <ScalarProperty Name="CheckedAnswer" ColumnName="CheckedAnswer" />
+                <ScalarProperty Name="Query" ColumnName="Query" />
+                <ScalarProperty Name="Snippet" ColumnName="Snippet" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="W3">
+            <EntityTypeMapping TypeName="SparkHelp_dbModel.W3">
+              <MappingFragment StoreEntitySet="W3">
                 <ScalarProperty Name="Query" ColumnName="Query" />
                 <ScalarProperty Name="Snippet" ColumnName="Snippet" />
                 <ScalarProperty Name="Link" ColumnName="Link" />

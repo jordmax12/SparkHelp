@@ -71,6 +71,8 @@ namespace SparkHelp.Controllers
                 var cp_count = grabCP.ToList().Count;
                 var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
                 var U_count = grabUnity.ToList().Count;
+                var grabW3 = db.W3.Where(w => w.Query == resultQuery).Distinct();
+                var W_count = grabW3.ToList().Count;
 
                 int x = 0;
                 int y = 0;
@@ -111,10 +113,12 @@ namespace SparkHelp.Controllers
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
                 List<CodeProject> finalCP = new List<CodeProject>();
                 List<Unity3D> finalUnity= new List<Unity3D>();
+                List<W3> finalW3 = new List<W3>();
                 string prevMSDNString = "";
                 string prevSOstring = "";
                 string prevCPstring = "";
                 string prevUnitystring = "";
+                string prevW3string = "";
 
                 if (so_count == 0)
                 {
@@ -135,6 +139,11 @@ namespace SparkHelp.Controllers
                 if (U_count == 0)
                 {
                    GetUnityData(resultQuery);
+                }
+
+                if (W_count == 0)
+                {
+                    GetW3Data(resultQuery);
                 }
 
                 grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
@@ -174,6 +183,15 @@ namespace SparkHelp.Controllers
                     prevUnitystring = item.Title.Trim();
                 }
 
+                grabW3 = db.W3.Where(w => w.Query == resultQuery);
+                foreach (var item in grabW3)
+                {
+                    if (item.Title.Trim() != prevW3string)
+                        finalW3.Add(item);
+
+                    prevW3string = item.Title.Trim();
+                }
+
 
                 if (finalMSDN.Count != 0)
                 {
@@ -182,7 +200,8 @@ namespace SparkHelp.Controllers
                         join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
                         join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
                         join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-                        select new ResultsViewModel {stack = s, msdn = m, CP = c, unity = u};
+                        join w in finalW3 on m.QuerySearch.Trim() equals w.Query.Trim()
+                        select new ResultsViewModel {stack = s, msdn = m, CP = c, unity = u, w3 = w};
 
                     return View(grab_all.ToList());
                 }
@@ -192,7 +211,8 @@ namespace SparkHelp.Controllers
                         from s in finalStack
                         join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
                         join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
-                        select new ResultsViewModel { stack = s, CP = c, unity = u };
+                        join w in finalW3 on s.QuestionQuery.Trim() equals w.Query.Trim()
+                        select new ResultsViewModel { stack = s, CP = c, unity = u, w3 = w };
 
                     return View(grab_all.ToList());
                 }
@@ -419,21 +439,21 @@ namespace SparkHelp.Controllers
                     "INSERT INTO Unity3D (Title, Link, Snippet, Query, CheckedAnswer) VALUES (@title, @link, @snippet, @query, @canswer)",
                             conn))
                 {
-                    SqlParameter cTitle = new SqlParameter();
-                    cTitle.ParameterName = "@title";
-                    cTitle.Value = obj.title;
+                    SqlParameter uTitle = new SqlParameter();
+                    uTitle.ParameterName = "@title";
+                    uTitle.Value = obj.title;
 
-                    SqlParameter cLink = new SqlParameter();
-                    cLink.ParameterName = "@link";
-                    cLink.Value = obj.link;
+                    SqlParameter uLink = new SqlParameter();
+                    uLink.ParameterName = "@link";
+                    uLink.Value = obj.link;
 
                     SqlParameter uSnippet = new SqlParameter();
                     uSnippet.ParameterName = "@snippet";
                     uSnippet.Value = obj.snippet;
 
-                    SqlParameter cQuery = new SqlParameter();
-                    cQuery.ParameterName = "@query";
-                    cQuery.Value = obj.query;
+                    SqlParameter uQuery = new SqlParameter();
+                    uQuery.ParameterName = "@query";
+                    uQuery.Value = obj.query;
 
                     SqlParameter uCAnswer = new SqlParameter();
                     uCAnswer.ParameterName = "@canswer";
@@ -446,14 +466,54 @@ namespace SparkHelp.Controllers
                         uCAnswer.Value = obj.checkedAnswer;
                     }
 
-
-
-
-                    cmd.Parameters.Add(cTitle);
-                    cmd.Parameters.Add(cLink);
+                    cmd.Parameters.Add(uTitle);
+                    cmd.Parameters.Add(uLink);
                     cmd.Parameters.Add(uSnippet);
-                    cmd.Parameters.Add(cQuery);
+                    cmd.Parameters.Add(uQuery);
                     cmd.Parameters.Add(uCAnswer);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void InsertIntoDB(W3_Object obj)
+        {
+            string connString = System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                if (conn.State != System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("Error in opening database connection!");
+                    return;
+                }
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "INSERT INTO W3 (Title, Link, Snippet, Query) VALUES (@title, @link, @snippet, @query)",
+                            conn))
+                {
+                    SqlParameter wTitle = new SqlParameter();
+                    wTitle.ParameterName = "@title";
+                    wTitle.Value = obj.title;
+
+                    SqlParameter wLink = new SqlParameter();
+                    wLink.ParameterName = "@link";
+                    wLink.Value = obj.link;
+
+                    SqlParameter wSnippet = new SqlParameter();
+                    wSnippet.ParameterName = "@snippet";
+                    wSnippet.Value = obj.snippet;
+
+                    SqlParameter wQuery = new SqlParameter();
+                    wQuery.ParameterName = "@query";
+                    wQuery.Value = obj.query;
+
+                    cmd.Parameters.Add(wTitle);
+                    cmd.Parameters.Add(wLink);
+                    cmd.Parameters.Add(wSnippet);
+                    cmd.Parameters.Add(wQuery);
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -720,6 +780,68 @@ namespace SparkHelp.Controllers
             Console.WriteLine(  "debug");
 
 
+        }
+
+        public void GetW3Data(string query)
+        {
+            bool success = false;
+            string url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyARl7587QeTqdMqP1rFKVj2UuNlrtoFsak&cx=003540131153181508748:rfllse6yorm&q=" + query + "&alt=json";
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument doc = web.Load(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            try
+            {
+                var response = (HttpWebResponse) request.GetResponse();
+                var reader = new StreamReader(response.GetResponseStream());
+                var objText = reader.ReadToEnd();
+
+                doc.LoadHtml(objText);
+                success = true;
+                //dynamic obj = JObject.Parse(objText);
+                //string query2 = obj.query.results;
+
+                dynamic data = JObject.Parse(objText);
+                JArray test = data.items;
+
+                if (test != null)
+                {
+                    foreach (var item in test)
+                    {
+                        W3_Object W3 = new W3_Object();
+                        W3.title = item.Value<string>("title");
+                        W3.link = item.Value<string>("link");
+                        W3.snippet = item.Value<string>("snippet");
+                        W3.query = query;
+
+                        InsertIntoDB(W3);
+                    }
+                }
+                else
+                {
+                    W3_Object W3 = new W3_Object();
+                    W3.title = "null";
+                    W3.link = "null";
+                    W3.snippet = "null";
+                    W3.query = query;
+                    InsertIntoDB(W3);
+
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError &&
+                    ex.Response != null)
+                {
+                    success = false;
+                    W3_Object W3 = new W3_Object();
+                    W3.title = "null";
+                    W3.link = "null";
+                    W3.snippet = "null";
+                    W3.query = query;
+                    InsertIntoDB(W3);
+                }
+            }
+            
         }
 
         public static string Truncate(string value, int maxLength)

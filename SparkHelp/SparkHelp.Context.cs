@@ -31,5 +31,6 @@ namespace SparkHelp
         public virtual DbSet<CodeProject> CodeProjects { get; set; }
         public virtual DbSet<StackOverflow> StackOverflows { get; set; }
         public virtual DbSet<Unity3D> Unity3D { get; set; }
+        public virtual DbSet<W3> W3 { get; set; }
     }
 }

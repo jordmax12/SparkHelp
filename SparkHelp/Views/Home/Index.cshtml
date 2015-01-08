@@ -22,8 +22,11 @@
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="q">
                 <div class="input-group-btn">
-                    <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
+
+                    <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn,jbvb   bbbbbbbbbnggggggf7 btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
                 </div>
+
+                <input type="checkbox" value="StackOverflow" name="StackOverflow"  />
             </div>
         </form>
     </div>
@@ -40,6 +43,7 @@
                 int index2 = 0;
                 int index3 = 0;
                 int index4 = 0;
+                int index5 = 0;
                 string prevSOString = "";
             }
             @foreach (var item in Model)
@@ -83,7 +87,7 @@
                     {
 
                         <li>
-                            <a href="@item.msdn.QueryURL" stzyle="width: auto; height: 72px;">
+                            <a href="@item.msdn.QueryURL" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                             </a>
                         </li>
@@ -93,6 +97,39 @@
                     prevString = item.msdn.QueryTitle;
                 }
             }
+        </ul>
+    </div>
+
+    <div class="col-md-12">
+        <br />
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">W3</h2>
+        <br />
+        <ul class="list-results">
+
+            @{
+                string prevString4 = "";
+                page = 0;
+                index5 = 0;
+            }
+            @foreach (var item in Model)
+            {
+                if (item.w3 != null)
+                {
+                    if (item.w3.Title != prevString4 && index5 < 8 && item.w3.Title != "null")
+                    {
+
+                        <li>
+                            <a href="@item.w3.Link" style="width: auto; height: 72px;">
+                                <h4>@Html.DisplayFor(modelItem => item.w3.Title)</h4>
+                            </a>
+                        </li>
+                        index5++;
+                    }
+                    prevString4 = item.w3.Title;
+                }
+
+            }
+
         </ul>
     </div>
 
@@ -115,7 +152,7 @@
                     {
 
                         <li>
-                            <a href="@item.CP.Link" stzyle="width: auto; height: 72px;">
+                            <a href="@item.CP.Link" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                             </a>
                         </li>
@@ -130,9 +167,9 @@
     </div>
 
     <div class="col-md-12">
-        <br />
+        <br/>
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">Unity3D</h2>
-        <br />
+        <br/>
         <ul class="list-results">
 
             @{
@@ -148,7 +185,7 @@
                     {
 
                         <li>
-                            <a href="@item.unity.Link" stzyle="width: auto; height: 72px;">
+                            <a href="@item.unity.Link" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
                             </a>
                         </li>
@@ -156,11 +193,15 @@
                     }
                     prevString3 = item.unity.Title;
                 }
-                
+
             }
 
         </ul>
     </div>
+
+
+
+
 
     <!-- Search Navbar - END -->
 
