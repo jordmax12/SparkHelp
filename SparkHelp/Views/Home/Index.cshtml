@@ -26,8 +26,14 @@
                     <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
                 </div>
 
-                <input type="checkbox" value="StackOverflow" name="StackOverflow"  />
             </div>
+
+            <label>@Html.CheckBox("Stack", true) Stack Overflow </label>
+            <label>@Html.CheckBox("MSDN", true) MSDN </label>
+            <label>@Html.CheckBox("W3", true) W3</label>
+            <label>@Html.CheckBox("CodeProject", false) CodeProject </label>
+            <label>@Html.CheckBox("Unity3D", false) Unity3D </label>
+            
         </form>
     </div>
     <br/>

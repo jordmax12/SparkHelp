@@ -28,7 +28,8 @@ namespace SparkHelp.Controllers
         SparkHelp_dbEntities db = new SparkHelp_dbEntities();
         string resultQuery = "";
         string msdn_resultQuery = "";
-        public ActionResult Index(string queried, int? page)
+        
+        public ActionResult Index(string queried, int? page, bool? Stack, bool? MSDN, bool? W3, bool? CodeProject, bool? Unity3D)
         {
             Console.WriteLine(queried);
             if (Request.Params["q"] != null)
