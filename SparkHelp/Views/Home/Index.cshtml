@@ -28,52 +28,64 @@
 
             </div>
 
-            <label>@Html.CheckBox("Stack", true) Stack Overflow </label>
-            <label>@Html.CheckBox("MSDN", true) MSDN </label>
-            <label>@Html.CheckBox("W3", true) W3</label>
-            <label>@Html.CheckBox("CodeProject", false) CodeProject </label>
-            <label>@Html.CheckBox("Unity3D", false) Unity3D </label>
-            
+
+            <p><input type="checkbox" name="Stack" value="true" checked="checked"/> Stack Overflow
+            </p>
+            <p><input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
+            </p>
+            <p><input type="checkbox" name="W3" value="true" checked="checked" /> W3
+            </p>
+            <p><input type="checkbox" name="CodeProject" value="true" /> CodeProject
+            </p>
+            <p><input type="checkbox" name="Unity3D" value="true" /> Unity3D  </p>
         </form>
     </div>
     <br/>
     <br/>
 
-    <div class="col-md-12">
-        <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
-        <br />
-        <ul class="list-results">
-            @{
-                int page = 0;
-                int index = 0;
-                int index2 = 0;
-                int index3 = 0;
-                int index4 = 0;
-                int index5 = 0;
-                string prevSOString = "";
-            }
-            @foreach (var item in Model)
+<div class="col-md-12">
+    @{
+        if (Request.Params["Stack"] != null)
+        {
+            //string temp = Request.Params["Stack"];
+            //<p>@temp</p>
+        }
+
+    }
+    <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
+    <br/>
+    <ul class="list-results">
+        @{
+            int page = 0;
+            int index = 0;
+            int index2 = 0;
+            int index3 = 0;
+            int index4 = 0;
+            int index5 = 0;
+            string prevSOString = "";
+        }
+        @foreach (var item in Model)
+        {
+            if (item.stack != null)
             {
-                if (item.stack != null)
+                if (item.stack.QuestionTitle != prevSOString && index < 8 && item.stack.QuestionTitle.Trim() != "null")
                 {
-                    if (item.stack.QuestionTitle != prevSOString && index < 8 && item.stack.QuestionTitle.Trim() != "null")
-                    {
-                        string link = @item.stack.QuestionLink;
-                        <li>
-                            <a href="@link" style="width: auto; height: 72px;">
-                                <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
-                            </a>
-                        </li>
-                        index++;
-                        prevSOString = item.stack.QuestionTitle;
+                    string link = @item.stack.QuestionLink;
+                    <li>
+                        <a href="@link" style="width: auto; height: 72px;">
+                            <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
+                        </a>
+                    </li>
+                    index++;
+                    prevSOString = item.stack.QuestionTitle;
 
-                    }
                 }
-
             }
 
-        </ul>
-    </div>
+        }
+
+    </ul>
+</div>
     <div class="col-md-12">
         <br/>
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>

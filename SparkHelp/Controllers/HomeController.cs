@@ -28,8 +28,8 @@ namespace SparkHelp.Controllers
         SparkHelp_dbEntities db = new SparkHelp_dbEntities();
         string resultQuery = "";
         string msdn_resultQuery = "";
-        
-        public ActionResult Index(string queried, int? page, bool? Stack, bool? MSDN, bool? W3, bool? CodeProject, bool? Unity3D)
+
+        public ActionResult Index(string queried, int? page, string Stack, string MSDN, string W3, string CodeProject, string Unity3D)
         {
             Console.WriteLine(queried);
             if (Request.Params["q"] != null)
@@ -63,7 +63,7 @@ namespace SparkHelp.Controllers
 
                 //STACKOVERFLOW
                 List<StackOverflow> finalStack = new List<StackOverflow>();
-                if (Stack != false && Stack != null)
+                if (Stack == "true" && Stack != null)
                 {
                     var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
                     var so_count = grabQuestions.ToList().Count;
@@ -83,7 +83,7 @@ namespace SparkHelp.Controllers
 
                         prevSOstring = item.QuestionTitle.Trim();
                     }
-                } else if (Stack == false)
+                } else if (Stack == null)
                 {
                     StackOverflow stackObject = new StackOverflow();
                     stackObject.QuestionTitle = "null";
@@ -95,7 +95,7 @@ namespace SparkHelp.Controllers
 
                 //MSDN
                 List<MSDN_table> finalMSDN = new List<MSDN_table>();
-                if (MSDN != false && MSDN != null)
+                if (MSDN == "true" && MSDN != null)
                 {
                     var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
                     var msdn_count = grabMSDN.ToList().Count;
@@ -114,7 +114,7 @@ namespace SparkHelp.Controllers
 
                         prevMSDNString = item.QueryTitle.Trim();
                     }
-                } else if (MSDN == false)
+                } else if (MSDN == null)
                 {
                     MSDN_table MSDN_temp = new MSDN_table();
                     MSDN_temp.QueryTitle = "null";
@@ -126,7 +126,7 @@ namespace SparkHelp.Controllers
 
                 //CP
                 List<CodeProject> finalCP = new List<CodeProject>();
-                if (CodeProject != false && CodeProject != null)
+                if (CodeProject == "true" && CodeProject != null)
                 {
                     var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
                     var cp_count = grabCP.ToList().Count;
@@ -145,7 +145,7 @@ namespace SparkHelp.Controllers
 
                         prevCPstring = item.Title.Trim();
                     }
-                } else if (CodeProject == false)
+                } else if (CodeProject == null)
                 {
                     CodeProject CP = new CodeProject();
                     CP.Title = "null";
@@ -159,7 +159,7 @@ namespace SparkHelp.Controllers
 
                 //UNITY
                 List<Unity3D> finalUnity = new List<Unity3D>();
-                if (Unity3D != false && Unity3D != null)
+                if (Unity3D == "true" && Unity3D != null)
                 {
                     var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
                     var U_count = grabUnity.ToList().Count;
@@ -178,7 +178,7 @@ namespace SparkHelp.Controllers
 
                         prevUnitystring = item.Title.Trim();
                     }
-                } else if (Unity3D == false)
+                } else if (Unity3D == null)
                 {
                     Unity3D UO = new Unity3D();
                     UO.Title = "null";
@@ -193,7 +193,7 @@ namespace SparkHelp.Controllers
 
                 //W3
                 List<W3> finalW3 = new List<W3>();
-                if (W3 != false && W3 != null)
+                if (W3 == "true" && W3 != null)
                 {
                     var grabW3 = db.W3.Where(w => w.Query == resultQuery).Distinct();
                     var W_count = grabW3.ToList().Count;
@@ -212,7 +212,7 @@ namespace SparkHelp.Controllers
 
                         prevW3string = item.Title.Trim();
                     }
-                } else if (W3 == false)
+                } else if (W3 == null)
                 {
                     W3 W3_temp = new W3();
                     W3_temp.Title = "null";
