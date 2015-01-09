@@ -34,13 +34,31 @@
             <label><input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
             </label>
             <label>
-                <input type="checkbox" name="W3" value="true" checked="checked" /> W3
+                <input type="checkbox" name="W3" value="true" checked="checked"/> W3
             </label>
-            <label>
-                <input type="checkbox" name="CodeProject" value="true" /> CodeProject
-            </label>
-            <label><input type="checkbox" name="Unity3D" value="true"/> Unity3D 
-            </label>
+            @if (Request.Params["CodeProject"] != null)
+            {
+                <label>
+                    <input type="checkbox" name="CodeProject" value="true" checked="checked"/> CodeProject
+                </label>
+            }
+            else
+            {
+                <label>
+                    <input type="checkbox" name="CodeProject" value="true" /> CodeProject
+                </label>
+            }
+            @if (Request.Params["Unity3D"] != null)
+            {
+                <label><input type="checkbox" name="Unity3D" value="true" checked="checked"/> Unity3D
+                </label>
+            }
+            else
+            {
+                <label>
+                    <input type="checkbox" name="Unity3D" value="true" /> Unity3D
+                </label>
+            }
         </form>
     </div>
     <br/>
