@@ -50,9 +50,10 @@
 
     @if (Request.Params["Stack"] != null)
     {
-    <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
+        <br />
+        
     }
-    <br/>
     <ul class="list-results">
         @{
             int page = 0;
@@ -71,6 +72,7 @@
                 {
                     string link = @item.stack.QuestionLink;
                     <li>
+                        <p>@item.stack.QuestionVote</p>
                         <a href="@link" style="width: auto; height: 72px;">
                             <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
@@ -90,10 +92,10 @@
     @if (Request.Params["MSDN"] != null)
     {
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>
+        <br />
+        
     }
-        <br/>
         <ul class="list-results">
-
             @{
                 string prevString = "";
                 page = 0;
@@ -125,10 +127,10 @@
         @if (Request.Params["W3"] != null)
         {
             <h2 style="margin-left: auto; margin-right: auto; clear: both;">W3</h2>
+            <br />
+            
         }
-        <br />
         <ul class="list-results">
-
             @{
                 string prevString4 = "";
                 page = 0;
@@ -161,10 +163,10 @@
         @if (Request.Params["CodeProject"] != null)
         {
             <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
+            <br/>
+            
         }
-        <br/>
         <ul class="list-results">
-
             @{
                 string prevString2 = "";
                 page = 0;
@@ -176,8 +178,9 @@
                 {
                     if (item.CP.Title != prevString2 && index3 < 8 && item.CP.Title != "null")
                     {
-
+                        float rating = (float)(Math.Truncate((float)@item.CP.Rating * 100.0) / 100.0);
                         <li>
+                            <p>@rating / 5</p>
                             <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                             </a>
@@ -214,6 +217,7 @@
                     {
 
                         <li>
+                            
                             <a href="@item.unity.Link" style="width: auto; height: 72px;">
                                 <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
                             </a>

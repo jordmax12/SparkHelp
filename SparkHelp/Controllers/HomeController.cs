@@ -656,7 +656,8 @@ namespace SparkHelp.Controllers
                     string[] votesSplit = ratingAfterSplit[1].Split(delimCharThird);
                     try
                     {
-                        CP.rating = float.Parse(ratingAfterSplit[0]);
+                        float temp = float.Parse(ratingAfterSplit[0]);
+                        CP.rating = temp;
                     }
                     catch
                     {
