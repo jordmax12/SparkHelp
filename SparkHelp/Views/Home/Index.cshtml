@@ -28,14 +28,43 @@
 
             </div>
 
+            @if ((Request.Params["MSDN"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["Stack"] == null)
+            {
+                <label>
+                    <input type="checkbox" name="Stack" value="true" /> Stack Overflow
+                </label>
+            }
+            else
+            {
+                <label>
+                    <input type="checkbox" name="Stack" value="true" checked="checked" /> Stack Overflow
+                </label>
+            }
+            @if ((Request.Params["Stack"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["MSDN"] == null)
+            {
+                <label>
+                    <input type="checkbox" name="MSDN" value="true"/> MSDN
+                </label>
+            }
+            else
+            {
+                <label>
+                    <input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
+                </label>
+            }
+            @if ((Request.Params["Stack"] != null || Request.Params["MSDN"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["W3"] == null)
+            {
+                <label>
+                    <input type="checkbox" name="W3" value="true" /> W3
+                </label>
+            }
+            else
+            {
+                <label>
+                    <input type="checkbox" name="W3" value="true" checked="checked" /> W3
+                </label>
+            }
 
-            <label><input type="checkbox" name="Stack" value="true" checked="checked"/> Stack Overflow
-            </label>
-            <label><input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
-            </label>
-            <label>
-                <input type="checkbox" name="W3" value="true" checked="checked"/> W3
-            </label>
             @if (Request.Params["CodeProject"] != null)
             {
                 <label>
