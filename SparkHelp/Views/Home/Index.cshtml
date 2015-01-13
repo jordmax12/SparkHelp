@@ -121,21 +121,28 @@
                 {
                     string link = @item.stack.QuestionLink;
                     <li>
+                            @{
+                                var setTitleID = item.stack.QuestionID + "-qID";
+                                var setSumID = setTitleID + "-sum";
+                            }
                         <p>@item.stack.QuestionVote</p>
                         <a href="@link" style="width: auto; height: 72px;">
-                            <h4 class="stack-title">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
+                            <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
 
-                        <p class="stack-summary" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</p>
+
+                        <p class="stack-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</p>
 
                         @Scripts.Render("~/bundles/jquery")
                         <script text="text~/javascript">
-                            $(document).ready(function () {
-                                $(".stack-title").hover(function () {
-                                    $(".stack-summary").css("display", "block");
-                                }, function() {
-                                    $(".stack-summary").css("display", "none");
-                            });
+                            $(document).ready(function() {
+                                $(".stack-title").hover(function(event) {
+                                    var target = event.target.id;
+                                    $("#" + target + "-sum").css("display", "block");
+                                }, function(event) {
+                                    var target = event.target.id;
+                                    $("#" + target + "-sum").css("display", "none");
+                                });
 
                             });
 
