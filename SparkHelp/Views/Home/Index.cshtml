@@ -7,7 +7,8 @@
 }
 
 
-<link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="Content/font-awesome.css"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="Content/Site.css" />
 <div class="container">
@@ -125,7 +126,21 @@
                                 var setTitleID = item.stack.QuestionID + "-qID";
                                 var setSumID = setTitleID + "-sum";
                             }
-                        <p>@item.stack.QuestionVote</p>
+
+                        @if (item.stack.QuestionVote < 0)
+                        {
+                            <i class="fa fa-arrow-down" style="color: red;">&nbsp;@item.stack.QuestionVote</i>
+                        }
+                        else if (item.stack.QuestionVote > 0)
+                        {
+                            <i class="fa fa-arrow-up" style="color: green;">&nbsp;@item.stack.QuestionVote</i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-arrow-right" style="color: black;">&nbsp;@item.stack.QuestionVote</i>
+                        }
+                        
+                       
                         <a href="@link" style="width: auto; height: 72px;">
                             <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
