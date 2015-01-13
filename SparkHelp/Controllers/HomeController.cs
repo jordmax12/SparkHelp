@@ -60,23 +60,6 @@ namespace SparkHelp.Controllers
                     i++;
                 }
 
-                /*foreach (string st in newQuery)
-                {
-                    try
-                    {
-
-                    }
-                    catch
-                    {
-
-                    }
-                    if (st[j] == st[0])
-                        msdn_resultQuery += st;
-                    else
-                        msdn_resultQuery += "%20" + st;
-                    j++;
-                }*/
-
                 //STACKOVERFLOW
                 List<StackOverflow> finalStack = new List<StackOverflow>();
                 if (Stack == "true" && Stack != null)
@@ -289,7 +272,7 @@ namespace SparkHelp.Controllers
         
        
 
-        public void InsertIntoDB(Stack_Object obj, string table)
+        public void InsertIntoDB(StackOverflow obj, string table)
         {
             string connString =
                 System.Configuration.ConfigurationManager.ConnectionStrings[@"SparkHelp"].ConnectionString;
@@ -306,29 +289,34 @@ namespace SparkHelp.Controllers
                 using (
                     SqlCommand cmd =
                         new SqlCommand(
-                            "INSERT INTO StackOverflow (QuestionTitle, QuestionLink, QuestionVote, QuestionQuery) VALUES (@qtitle, @qlink, @qvote, @qquery)",
+                            "INSERT INTO StackOverflow (QuestionTitle, QuestionLink, QuestionVote, QuestionQuery, QuestionText) VALUES (@qtitle, @qlink, @qvote, @qquery, @qtext)",
                             conn))
                 {
                     SqlParameter sTitle = new SqlParameter();
                     sTitle.ParameterName = "@qtitle";
-                    sTitle.Value = obj.title;
+                    sTitle.Value = obj.QuestionTitle;
 
                     SqlParameter sLink = new SqlParameter();
                     sLink.ParameterName = "@qlink";
-                    sLink.Value = obj.link;
+                    sLink.Value = obj.QuestionLink;
 
                     SqlParameter sRating = new SqlParameter();
                     sRating.ParameterName = "@qvote";
-                    sRating.Value = obj.rating;
+                    sRating.Value = obj.QuestionVote;
 
                     SqlParameter sQuery = new SqlParameter();
                     sQuery.ParameterName = "@qquery";
                     sQuery.Value = resultQuery;
 
+                    SqlParameter sText = new SqlParameter();
+                    sText.ParameterName = "@qtext";
+                    sText.Value = obj.QuestionText;
+
                     cmd.Parameters.Add(sTitle);
                     cmd.Parameters.Add(sLink);
                     cmd.Parameters.Add(sRating);
                     cmd.Parameters.Add(sQuery);
+                    cmd.Parameters.Add(sText);
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -593,11 +581,12 @@ namespace SparkHelp.Controllers
 
             if (response.Data.Items.Count() == 0)
             {
-                Stack_Object stackObject = new Stack_Object();
-                stackObject.title = "null";
-                stackObject.link = "null";
-                stackObject.rating = 0.0f;
-                stackObject.query = query;
+                StackOverflow stackObject = new StackOverflow();
+                stackObject.QuestionTitle = "null";
+                stackObject.QuestionLink = "null";
+                stackObject.QuestionText = "null";
+                stackObject.QuestionVote = 0;
+                stackObject.QuestionQuery = query;
 
                 InsertIntoDB(stackObject, "stackoverflow");
             }
@@ -605,11 +594,30 @@ namespace SparkHelp.Controllers
             {
                 foreach (var question in response.Data.Items)
                 {
-                    Stack_Object stackObject = new Stack_Object();
-                    stackObject.title = question.Title;
-                    stackObject.link = question.Link;
-                    stackObject.rating = question.Score;
-                    stackObject.query = query;
+                    StackOverflow stackObject = new StackOverflow();
+                    stackObject.QuestionTitle= question.Title;
+                    stackObject.QuestionLink= question.Link;
+                    stackObject.QuestionVote = question.Score;
+                    stackObject.QuestionQuery = query;
+
+                    HtmlWeb web = new HtmlWeb();
+                    HtmlDocument doc = web.Load(stackObject.QuestionLink);
+                    if (doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
+                    {
+                        var question_text =
+                            doc.DocumentNode.SelectSingleNode("//div [@class=\"question\"]")
+                                .SelectSingleNode(".//div [@class=\"post-text\"]")
+                                .InnerText;
+
+
+                        if (question_text.Count() >= 147)
+                        {
+                            question_text = Truncate(question_text, 147);
+                            question_text += "...";
+                        }
+
+                        stackObject.QuestionText = question_text.Trim();
+                    }
 
                     InsertIntoDB(stackObject, "stackoverflow");
                 }
