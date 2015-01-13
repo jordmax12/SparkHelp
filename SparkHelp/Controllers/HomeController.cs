@@ -31,6 +31,7 @@ namespace SparkHelp.Controllers
 
         public ActionResult Index(string queried, int? page, string Stack, string MSDN, string W3, string CodeProject, string Unity3D)
         {
+            
             Console.WriteLine(queried);
             if (Request.Params["q"] != null)
             {
@@ -45,21 +46,36 @@ namespace SparkHelp.Controllers
                 int j = 0;
                 foreach (string s in newQuery)
                 {
-                    if (s[i] == s[0])
-                        resultQuery += s;
-                    else
+                    try
+                    {
+                        if (s[i] == s[0])
+                            resultQuery += s;
+                        else
+                            resultQuery += "+" + s;
+                    }
+                    catch
+                    {
                         resultQuery += "+" + s;
+                    }
                     i++;
                 }
 
-                foreach (string st in newQuery)
+                /*foreach (string st in newQuery)
                 {
+                    try
+                    {
+
+                    }
+                    catch
+                    {
+
+                    }
                     if (st[j] == st[0])
                         msdn_resultQuery += st;
                     else
                         msdn_resultQuery += "%20" + st;
                     j++;
-                }
+                }*/
 
                 //STACKOVERFLOW
                 List<StackOverflow> finalStack = new List<StackOverflow>();
@@ -517,21 +533,19 @@ namespace SparkHelp.Controllers
 
         public void GetMSDNData(string query)
         {
-            string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query + "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
+            string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query +
+                         "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
 
             try
             {
-                var response = (HttpWebResponse)request.GetResponse();
+                var response = (HttpWebResponse) request.GetResponse();
                 var reader = new StreamReader(response.GetResponseStream());
                 var objText = reader.ReadToEnd();
 
                 doc.LoadHtml(objText);
-
-                //dynamic obj = JObject.Parse(objText);
-                //string query2 = obj.query.results;
 
                 dynamic data = JObject.Parse(objText);
                 JArray test = data.data.results;
@@ -555,8 +569,6 @@ namespace SparkHelp.Controllers
                         msdn_result_object.description = item.Value<string>("description");
                         msdn_result_object.url = item.Value<string>("display_url");
                         msdn_result_object.query = resultQuery;
-                        //need to get rating
-                        //msdn_result_object.rating = test[idx].First.Value<float>("rating");
                         InsertIntoDB(msdn_result_object, "msdn");
                     }
                 }
@@ -565,35 +577,12 @@ namespace SparkHelp.Controllers
             {
                 Console.WriteLine("error");
             }
-
-           
-
-
-
-
-            //HtmlDocument doc = new HtmlDocument();
-            //HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-            /*var response = (HttpWebResponse) request.GetResponse();
-            var reader = new StreamReader(response.GetResponseStream());
-            var objText = reader.ReadToEnd();
-
-            doc.LoadHtml(objText);*/
-
-            /* HtmlNodeCollection tl = doc.DocumentNode.SelectNodes(@"/query");
-            foreach (HtmlNode node in tl)
-            {
-                Console.WriteLine(node.InnerText);
-            }*/
-
-
-
         }
 
         public void GetStackData(string query)
         {
             var client = new StacManClient(key: "DVtF2taHDlKbZ3TEP8P9Yw((", version: "2.1");
 
-            //var response = client.Sites.GetAll(filter: "default", page: 1, pagesize: 1).Result;
             var response = client.Search.GetMatchesAdvanced(site: "stackoverflow", filter: "default", page: null,
                 pagesize: null, fromdate: null, todate: null,
                 sort: SearchSort.Relevance, mindate: null, maxdate: null,
@@ -705,9 +694,6 @@ namespace SparkHelp.Controllers
                 success = true;
                 doc.LoadHtml(objText);
 
-                //dynamic obj = JObject.Parse(objText);
-                //string query2 = obj.query.results;
-
                 dynamic data = JObject.Parse(objText);
                 JArray test = data.items;
 
@@ -793,8 +779,6 @@ namespace SparkHelp.Controllers
 
                 doc.LoadHtml(objText);
                 success = true;
-                //dynamic obj = JObject.Parse(objText);
-                //string query2 = obj.query.results;
 
                 dynamic data = JObject.Parse(objText);
                 JArray test = data.items;
@@ -849,43 +833,3 @@ namespace SparkHelp.Controllers
 
 
 }
-
-/*final without stack
- * var grab_all =
-      from m in finalMSDN
-      join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-      join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-      select new ResultsViewModel { msdn = m, CP = c, unity = u };
-
-    return View(grab_all.ToList());   
- * 
- * final without cp 
- * var grab_all =
-        from m in finalMSDN
-        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-        join u in finalUnity on m.QuerySearch.Trim() equals u.Query.Trim()
-        select new ResultsViewModel { stack = s, msdn = m, unity = u };
-
-    return View(grab_all.ToList());
- * 
- * final without unity
- * var grab_all =
-        from m in finalMSDN
-        join s in finalStack on m.QuerySearch.Trim() equals s.QuestionQuery.Trim()
-        join c in finalCP on m.QuerySearch.Trim() equals c.QuestionQuery.Trim()
-        select new ResultsViewModel { stack = s, msdn = m, CP = c };
-
-    return View(grab_all.ToList());
- * 
- * final without msdn
- *                     var grab_all =
-        from s in finalStack
-        join c in finalCP on s.QuestionQuery.Trim() equals c.QuestionQuery.Trim()
-        join u in finalUnity on s.QuestionQuery.Trim() equals u.Query.Trim()
-        select new ResultsViewModel { stack = s, CP = c, unity = u };
-
-    return View(grab_all.ToList());
- * */
-
-
-//.ToPagedList(page ?? 1, 8)

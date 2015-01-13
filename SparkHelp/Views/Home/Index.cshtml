@@ -5,6 +5,8 @@
     ViewBag.Title = "Home Page";
 
 }
+
+
 <link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css"/>
 <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="Content/Site.css" />
@@ -16,13 +18,13 @@
     <br/>
     <br/>
     <!-- Search Navbar - START -->
-
+    <button class="Button1" id="Button1"></button>
     <div class="col-md-4 col-md-offset-4">
         <form class="navbar-form" role="search">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search" name="q">
                 <div class="input-group-btn">
-
+                    
                     <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
                 </div>
 
@@ -121,8 +123,23 @@
                     <li>
                         <p>@item.stack.QuestionVote</p>
                         <a href="@link" style="width: auto; height: 72px;">
-                            <h4>@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
+                            <h4 class="stack-title">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
+
+                        <p class="stack-summary" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</p>
+
+                        @Scripts.Render("~/bundles/jquery")
+                        <script text="text~/javascript">
+                            $(document).ready(function () {
+                                $(".stack-title").hover(function () {
+                                    $(".stack-summary").css("display", "block");
+                                }, function() {
+                                    $(".stack-summary").css("display", "none");
+                            });
+
+                            });
+
+                        </script>
                     </li>
                     index++;
                     prevSOString = item.stack.QuestionTitle;
