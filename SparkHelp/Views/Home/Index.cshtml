@@ -148,20 +148,7 @@
 
                         <p class="stack-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
 
-                        @Scripts.Render("~/bundles/jquery")
-                        <script text="text~/javascript">
-                            $(document).ready(function() {
-                                $(".stack-title").hover(function(event) {
-                                    var target = event.target.id;
-                                    $("#" + target + "-sum").css("display", "block");
-                                }, function(event) {
-                                    var target = event.target.id;
-                                    $("#" + target + "-sum").css("display", "none");
-                                });
 
-                            });
-
-                        </script>
                     </li>
                     index++;
                     prevSOString = item.stack.QuestionTitle;
@@ -189,15 +176,21 @@
             }
             @foreach (var item in Model)
             {
+
+
                 if (item.msdn != null)
                 {
                     if (item.msdn.QueryTitle != prevString && index2 < 8 && item.msdn.QueryTitle != "null")
                     {
                         string link = @item.msdn.QueryURL;
+                        var setTitleID = item.msdn.QueryID + "-qID";
+                        var setSumID = setTitleID + "-sum";
                         <li>
                             <a href="http://@link" style="width: auto; height: 72px;">
-                                <h4>@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
+                                <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                             </a>
+
+                            <p class="msdn-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
                         </li>
                         index2++;
                     }
@@ -228,11 +221,13 @@
                 {
                     if (item.w3.Title != prevString4 && index5 < 8 && item.w3.Title != "null")
                     {
-
+                        var setTitleID = item.w3.ID + "-qID";
+                        var setSumID = setTitleID + "-sum";
                         <li>
                             <a href="@item.w3.Link" style="width: auto; height: 72px;">
-                                <h4>@Html.DisplayFor(modelItem => item.w3.Title)</h4>
+                                <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
                             </a>
+                            <p class="w3-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
                         </li>
                         index5++;
                     }
@@ -265,11 +260,14 @@
                     if (item.CP.Title != prevString2 && index3 < 8 && item.CP.Title != "null")
                     {
                         float rating = (float)(Math.Truncate((float)@item.CP.Rating * 100.0) / 100.0);
+                        var setTitleID = item.CP.QuestionID + "-qID";
+                        var setSumID = setTitleID + "-sum";
                         <li>
                             <p>@rating / 5</p>
                             <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
-                                <h4>@Html.DisplayFor(modelItem => item.CP.Title)</h4>
+                                <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                             </a>
+                            <p class="CP-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
                         </li>
                         index3++;
                     }
@@ -301,12 +299,13 @@
                 {
                     if (item.unity.Title != prevString3 && index4 < 8 && item.unity.Title != "null")
                     {
-
+                        var setTitleID = item.unity.ID + "-qID";
+                        var setSumID = setTitleID + "-sum";
                         <li>
-                            
                             <a href="@item.unity.Link" style="width: auto; height: 72px;">
-                                <h4>@Html.DisplayFor(modelItem => item.unity.Title)</h4>
+                                <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
                             </a>
+                            <p class="unity-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
                         </li>
                         index4++;
                     }
@@ -325,3 +324,50 @@
     <!-- Search Navbar - END -->
 
 </div>
+
+@Scripts.Render("~/bundles/jquery")
+<script text="text~/javascript">
+    $(document).ready(function () {
+        $(".stack-title").hover(function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "block");
+        }, function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "none");
+        });
+
+        $(".msdn-title").hover(function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "block");
+        }, function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "none");
+        });
+
+        $(".CP-title").hover(function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "block");
+        }, function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "none");
+        });
+
+        $(".w3-title").hover(function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "block");
+        }, function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "none");
+        });
+
+        $(".unity-title").hover(function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "block");
+        }, function (event) {
+            var target = event.target.id;
+            $("#" + target + "-sum").css("display", "none");
+        });
+
+    });
+
+</script>

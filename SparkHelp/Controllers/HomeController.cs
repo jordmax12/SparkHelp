@@ -66,12 +66,13 @@ namespace SparkHelp.Controllers
                 {
                     var grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
                     var so_count = grabQuestions.ToList().Count;
-                    
+                    int max_count = 10;
+
                     string prevSOstring = "";
 
                     if (so_count == 0)
                     {
-                        GetStackData(resultQuery);
+                        GetStackData(resultQuery, max_count);
                     }
 
                     grabQuestions = db.StackOverflows.Where(q => q.QuestionQuery == resultQuery);
@@ -98,11 +99,12 @@ namespace SparkHelp.Controllers
                 {
                     var grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery).Distinct();
                     var msdn_count = grabMSDN.ToList().Count;
+                    int max_count = 10;
                     
                     string prevMSDNString = "";
                     if (msdn_count == 0)
                     {
-                        GetMSDNData(resultQuery);
+                        GetMSDNData(resultQuery, max_count);
                     }
 
                     grabMSDN = db.MSDN_table.Where(m => m.QuerySearch == resultQuery);
@@ -129,11 +131,11 @@ namespace SparkHelp.Controllers
                 {
                     var grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery).Distinct();
                     var cp_count = grabCP.ToList().Count;
-                    
+                    int max_count = 8;
                     string prevCPstring = "";
                     if (cp_count == 0)
                     {
-                        GetCPData(resultQuery);
+                        GetCPData(resultQuery, max_count);
                     }
 
                     grabCP = db.CodeProjects.Where(c => c.QuestionQuery == resultQuery);
@@ -162,11 +164,11 @@ namespace SparkHelp.Controllers
                 {
                     var grabUnity = db.Unity3D.Where(u => u.Query == resultQuery).Distinct();
                     var U_count = grabUnity.ToList().Count;
-                    
+                    int max_count = 8;
                     string prevUnitystring = "";
                     if (U_count == 0)
                     {
-                        GetUnityData(resultQuery);
+                        GetUnityData(resultQuery, max_count);
                     }
 
                     grabUnity = db.Unity3D.Where(u => u.Query == resultQuery);
@@ -196,11 +198,11 @@ namespace SparkHelp.Controllers
                 {
                     var grabW3 = db.W3.Where(w => w.Query == resultQuery).Distinct();
                     var W_count = grabW3.ToList().Count;
-                    
+                    int max_count = 8;
                     string prevW3string = "";
                     if (W_count == 0)
                     {
-                        GetW3Data(resultQuery);
+                        GetW3Data(resultQuery, max_count);
                     }
 
                     grabW3 = db.W3.Where(w => w.Query == resultQuery);
@@ -519,13 +521,14 @@ namespace SparkHelp.Controllers
             }
         }
 
-        public void GetMSDNData(string query)
+        public void GetMSDNData(string query, int max)
         {
             string url = "https://services.social.microsoft.com/searchapi/en-US/Msdn?query=" + query +
                          "&amp;maxnumberedpages=5&amp;encoderesults=1&amp;highlightqueryterms=1";
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+            int idx = 0;
 
             try
             {
@@ -552,12 +555,16 @@ namespace SparkHelp.Controllers
                 {
                     foreach (var item in test)
                     {
-                        MSDN_Object msdn_result_object = new MSDN_Object();
-                        msdn_result_object.title = item.Value<string>("title");
-                        msdn_result_object.description = item.Value<string>("description");
-                        msdn_result_object.url = item.Value<string>("display_url");
-                        msdn_result_object.query = resultQuery;
-                        InsertIntoDB(msdn_result_object, "msdn");
+                        if (idx <= max)
+                        {
+                            MSDN_Object msdn_result_object = new MSDN_Object();
+                            msdn_result_object.title = item.Value<string>("title");
+                            msdn_result_object.description = item.Value<string>("description");
+                            msdn_result_object.url = item.Value<string>("display_url");
+                            msdn_result_object.query = resultQuery;
+                            InsertIntoDB(msdn_result_object, "msdn");
+                            idx++;
+                        }
                     }
                 }
             }
@@ -567,9 +574,10 @@ namespace SparkHelp.Controllers
             }
         }
 
-        public void GetStackData(string query)
+        public void GetStackData(string query, int max)
         {
             var client = new StacManClient(key: "DVtF2taHDlKbZ3TEP8P9Yw((", version: "2.1");
+            int idx = 0;
 
             var response = client.Search.GetMatchesAdvanced(site: "stackoverflow", filter: "default", page: null,
                 pagesize: null, fromdate: null, todate: null,
@@ -594,32 +602,36 @@ namespace SparkHelp.Controllers
             {
                 foreach (var question in response.Data.Items)
                 {
-                    StackOverflow stackObject = new StackOverflow();
-                    stackObject.QuestionTitle= question.Title;
-                    stackObject.QuestionLink= question.Link;
-                    stackObject.QuestionVote = question.Score;
-                    stackObject.QuestionQuery = query;
-
-                    HtmlWeb web = new HtmlWeb();
-                    HtmlDocument doc = web.Load(stackObject.QuestionLink);
-                    if (doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
+                    if (idx <= max)
                     {
-                        var question_text =
-                            doc.DocumentNode.SelectSingleNode("//div [@class=\"question\"]")
-                                .SelectSingleNode(".//div [@class=\"post-text\"]")
-                                .InnerText;
+                        StackOverflow stackObject = new StackOverflow();
+                        stackObject.QuestionTitle = question.Title;
+                        stackObject.QuestionLink = question.Link;
+                        stackObject.QuestionVote = question.Score;
+                        stackObject.QuestionQuery = query;
 
-
-                        if (question_text.Count() >= 147)
+                        HtmlWeb web = new HtmlWeb();
+                        HtmlDocument doc = web.Load(stackObject.QuestionLink);
+                        if (doc.DocumentNode.SelectNodes("//div [@class=\"question\"]") != null)
                         {
-                            question_text = Truncate(question_text, 147);
-                            question_text += "...";
+                            var question_text =
+                                doc.DocumentNode.SelectSingleNode("//div [@class=\"question\"]")
+                                    .SelectSingleNode(".//div [@class=\"post-text\"]")
+                                    .InnerText;
+
+
+                            if (question_text.Count() >= 147)
+                            {
+                                question_text = Truncate(question_text, 147);
+                                question_text += "...";
+                            }
+
+                            stackObject.QuestionText = question_text.Trim();
                         }
 
-                        stackObject.QuestionText = question_text.Trim();
+                        InsertIntoDB(stackObject, "stackoverflow");
+                        idx++;
                     }
-
-                    InsertIntoDB(stackObject, "stackoverflow");
                 }
             }
 
@@ -627,7 +639,7 @@ namespace SparkHelp.Controllers
 
         }
 
-        public void GetCPData(string query)
+        public void GetCPData(string query, int max)
         {
             string url = "http://www.codeproject.com/search.aspx?q=" + query + "&x=0&y=0&sbo=kw&pgsz=10";
             HtmlWeb web = new HtmlWeb();
@@ -638,39 +650,43 @@ namespace SparkHelp.Controllers
             {
                 foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div [@class=\"entry\"]"))
                 {
-                    CP_Object CP = new CP_Object();
-                    CP.title = node.SelectSingleNode(".//span [@class=\"title\"]").InnerText;
-                    CP.link = "www.codeproject.com/" +
-                              node.SelectSingleNode(".//a").Attributes["href"].Value;
-                    char[] delimCharFirst = {'='};
-                    string[] grabRating =
-                        node.SelectSingleNode(".//div [@class=\"nowrap rating-stars-small\"]")
-                            .OuterHtml.Split(delimCharFirst);
-                    string getRatingContent = grabRating[2].TrimStart();
-                    char[] delimCharSecond = {' '};
-                    char[] delimCharThird = {'('};
-                    string[] ratingAfterSplit = getRatingContent.Split(delimCharSecond);
-                    string[] votesSplit = ratingAfterSplit[1].Split(delimCharThird);
-                    try
+                    if (idx <= max)
                     {
-                        float temp = float.Parse(ratingAfterSplit[0]);
-                        CP.rating = temp;
+                        CP_Object CP = new CP_Object();
+                        CP.title = node.SelectSingleNode(".//span [@class=\"title\"]").InnerText;
+                        CP.link = "www.codeproject.com/" +
+                                  node.SelectSingleNode(".//a").Attributes["href"].Value;
+                        char[] delimCharFirst = { '=' };
+                        string[] grabRating =
+                            node.SelectSingleNode(".//div [@class=\"nowrap rating-stars-small\"]")
+                                .OuterHtml.Split(delimCharFirst);
+                        string getRatingContent = grabRating[2].TrimStart();
+                        char[] delimCharSecond = { ' ' };
+                        char[] delimCharThird = { '(' };
+                        string[] ratingAfterSplit = getRatingContent.Split(delimCharSecond);
+                        string[] votesSplit = ratingAfterSplit[1].Split(delimCharThird);
+                        try
+                        {
+                            float temp = float.Parse(ratingAfterSplit[0]);
+                            CP.rating = temp;
+                        }
+                        catch
+                        {
+                            CP.rating = 0.0f;
+                        }
+                        try
+                        {
+                            CP.votes = Convert.ToInt32(votesSplit[1]);
+                        }
+                        catch
+                        {
+                            CP.votes = 0;
+                        }
+                        CP.summary = node.SelectSingleNode(".//div [@class=\"summary\"]").InnerText;
+                        CP.query = query;
+                        InsertIntoDB(CP);
+                        idx++;
                     }
-                    catch
-                    {
-                        CP.rating = 0.0f;
-                    }
-                    try
-                    {
-                        CP.votes = Convert.ToInt32(votesSplit[1]);
-                    }
-                    catch
-                    {
-                        CP.votes = 0;
-                    }
-                    CP.summary = node.SelectSingleNode(".//div [@class=\"summary\"]").InnerText;
-                    CP.query = query;
-                    InsertIntoDB(CP);
                 }
 
             }
@@ -687,13 +703,14 @@ namespace SparkHelp.Controllers
             }
         }
 
-        public void GetUnityData(string query)
+        public void GetUnityData(string query, int max)
         {
             bool success = false;
             string url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyARl7587QeTqdMqP1rFKVj2UuNlrtoFsak&cx=003540131153181508748:oa0em0h_kv0&userIp=104.45.129.178&q=" + query + "&alt=json";
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            int idx = 0;
             try
             {
                 var response = (HttpWebResponse)request.GetResponse();
@@ -709,33 +726,36 @@ namespace SparkHelp.Controllers
                 {
                     foreach (var item in test)
                     {
-                        Unity_Object UO = new Unity_Object();
-                        UO.title = item.Value<string>("title");
-                        UO.link = item.Value<string>("link");
-                        UO.snippet = item.Value<string>("snippet");
-                        UO.query = query;
-
-
-                        HtmlWeb sub_web = new HtmlWeb();
-                        HtmlDocument sub_doc = sub_web.Load(UO.link);
-
-
-
-                        if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer full\"]") != null)
+                        if (idx <= max)
                         {
-                            UO.checkedAnswer =
-                                sub_doc.DocumentNode.SelectSingleNode("//div [@class=\"answer full\"]")
-                                    .SelectSingleNode(".//div [@class=\"answer-body\"]")
-                                    .InnerText.TrimStart().TrimEnd();
+                            Unity_Object UO = new Unity_Object();
+                            UO.title = item.Value<string>("title");
+                            UO.link = item.Value<string>("link");
+                            UO.snippet = item.Value<string>("snippet");
+                            UO.query = query;
 
-                        }
-                        else
-                        {
-                            UO.checkedAnswer = "null";
-                        }
 
-                        InsertIntoDB(UO);
-                        Console.WriteLine("debug");
+                            HtmlWeb sub_web = new HtmlWeb();
+                            HtmlDocument sub_doc = sub_web.Load(UO.link);
+
+
+
+                            if (sub_doc.DocumentNode.SelectNodes("//div [@class=\"answer full\"]") != null)
+                            {
+                                UO.checkedAnswer =
+                                    sub_doc.DocumentNode.SelectSingleNode("//div [@class=\"answer full\"]")
+                                        .SelectSingleNode(".//div [@class=\"answer-body\"]")
+                                        .InnerText.TrimStart().TrimEnd();
+
+                            }
+                            else
+                            {
+                                UO.checkedAnswer = "null";
+                            }
+
+                            InsertIntoDB(UO);
+                            idx++;
+                        }
                     }
                 }
                 else
@@ -772,13 +792,15 @@ namespace SparkHelp.Controllers
 
         }
 
-        public void GetW3Data(string query)
+        public void GetW3Data(string query, int max)
         {
             bool success = false;
             string url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyARl7587QeTqdMqP1rFKVj2UuNlrtoFsak&cx=003540131153181508748:rfllse6yorm&q=" + query + "&alt=json";
             HtmlWeb web = new HtmlWeb();
             HtmlDocument doc = web.Load(url);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            int idx = 0;
+
             try
             {
                 var response = (HttpWebResponse) request.GetResponse();
@@ -795,13 +817,17 @@ namespace SparkHelp.Controllers
                 {
                     foreach (var item in test)
                     {
-                        W3_Object W3 = new W3_Object();
-                        W3.title = item.Value<string>("title");
-                        W3.link = item.Value<string>("link");
-                        W3.snippet = item.Value<string>("snippet");
-                        W3.query = query;
+                        if (idx <= max)
+                        {
+                            W3_Object W3 = new W3_Object();
+                            W3.title = item.Value<string>("title");
+                            W3.link = item.Value<string>("link");
+                            W3.snippet = item.Value<string>("snippet");
+                            W3.query = query;
 
-                        InsertIntoDB(W3);
+                            InsertIntoDB(W3);
+                            idx++;
+                        }
                     }
                 }
                 else
