@@ -263,7 +263,25 @@
                         var setTitleID = item.CP.QuestionID + "-qID";
                         var setSumID = setTitleID + "-sum";
                         <li>
-                            <p>@rating / 5</p>
+                            @if (rating >= 4)
+                            {
+                                <i class="fa fa-arrow-up" style="color: green;">
+                                    <p>@rating / 5</p>
+                                </i>
+                            }
+                            else if (rating > 3.0 && rating < 4.0)
+                            {
+                                <i class="fa fa-arrow-right" style="color: black;">
+                                    <p>@rating / 5</p>
+                                </i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-arrow-down" style="color: red;">
+                                    <p>@rating / 5</p>
+                                </i>
+                            }
+                            
                             <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
                                 <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                             </a>
