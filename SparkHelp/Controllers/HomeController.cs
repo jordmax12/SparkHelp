@@ -311,19 +311,8 @@ namespace SparkHelp.Controllers
                     sQuery.Value = resultQuery;
 
                     SqlParameter sText = new SqlParameter();
-                    if (obj.QuestionText != null)
-                    {
-                        
-                        sText.ParameterName = "@qtext";
-                        sText.Value = obj.QuestionText;
-                    }
-                    else
-                    {
-                        sText.ParameterName = "@qtext";
-                        sText.Value = "null value";
-                    }
-
-                    
+                    sText.ParameterName = "@qtext";
+                    sText.Value = obj.QuestionText;
 
                     cmd.Parameters.Add(sTitle);
                     cmd.Parameters.Add(sLink);
