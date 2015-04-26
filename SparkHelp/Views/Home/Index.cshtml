@@ -11,7 +11,7 @@
 <form class="navbar-form" role="search">
     <div class="search-box">
         <div class="search-input"><input type="text" id="search" class="form-control" placeholder="search..." name="q"></div>
-        <div class="search-button"><button class="btn btn-default"><a href="@Url.Action("Index", "Home", new {queried = "true"})">Search</a></button></div>
+        <div class="search-button"><a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default">Search</button></a></div>
     </div>
     <div class="filters">
         @if ((Request.Params["MSDN"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["Stack"] == null)
