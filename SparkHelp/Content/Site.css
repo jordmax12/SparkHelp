@@ -42,7 +42,7 @@ textarea {
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 
 *{
-	font-family: 'ClearSans', Helvetica, Arial, sans-serif !important;
+	font-family: 'Noto Sans', Helvetica, Arial, sans-serif !important;
 	margin: 0px;
 	padding: 0px;
 }
@@ -54,6 +54,10 @@ textarea {
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 /* Default                                   */
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+*{
+    box-sizing: border-box; 
+}
 
 html{	
 	box-sizing: border-box; 
@@ -85,57 +89,66 @@ h1.title{
     color: #222;
     letter-spacing: 0.5em;
     line-height: 30px;
-    margin-bottom: 50px;
+    margin: 50px 0px;
     font-weight: bold;
     font-size: 45px;
     text-align: center;
 }
 
 .search-box{
-    border: 1px solid #ccc;
     background-color: #00adef;
-    height: 32px;
     overflow: hidden;
 }
 
 .search-box .search-input{
-    display: inline-block;
-    width: 86%;
+    float: left;
+    width: 85%;
     background-color: #fff;
 }
 
 .search-box .search-input input#search{
     border: 0px;
-    padding: 8px 25px;
+    padding: 8px 15px;
     font-size: 12px;
     letter-spacing: 0.3em;
-    width: 94%;
-    max-width: none;
+    min-width: 100%;
+    border-left: 1px solid #ccc;
+    border-right: 0px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    outline: none;
 }
 
 .search-box .search-input input#search:focus {
-    outline-width: 0;
+    outline: none;
 }
 
 .search-box .search-button {
-    display: inline-block;
-    width: 14%;
-    background-color: #00adef;
+    float: left;
+    width: 15%;
+    text-align: center;
 }
 
-.search-box .search-button button{
-    background-color: #00adef;
+.search-box .search-button a{
+    background-color: #058cc0;
     padding: 8px;
     color: #ffffff;
     letter-spacing: 0.5em;
     text-transform: uppercase;
     font-size: 12px;
-    border: 0px;
     width: 100%;
-    outline: none;
-    border: none;
     font-weight: bold;
-    height: 31px;
+    display: block;
+    text-decoration: none;
+}
+
+.search-box .search-button a:hover{
+    background-color: #00adef;
+}
+
+.search-box .search-button a:focus{
+    background-color: #056589;
 }
 
 .filters {
@@ -156,7 +169,7 @@ footer{
     text-align: center;
     letter-spacing: 0.1em;
 }
-
+/*
 @media screen and (max-width: 920px) {
     .search-box .search-input input#search {
         width: 92%;
@@ -168,37 +181,4 @@ footer{
         font-size: 10px;
         height: 34px;
     }
-}
-
-
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-/* Fonts                                     */
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-
-@font-face{
-	font-family: 'ClearSans';
-	src: url('fonts/ClearSans-Regular.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face{
-	font-family: 'ClearSans';
-	src: url('fonts/ClearSans-Bold.ttf');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face{
-	font-family: 'ClearSans';
-	src: url('fonts/ClearSans-Italic.ttf');
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face{
-	font-family: 'ClearSans';
-	src: url('fonts/ClearSans-BoldiIalic.ttf');
-    font-weight: bold;
-    font-style: italic;
-}
+}*/
