@@ -1,7 +1,4 @@
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
+
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -39,3 +36,169 @@ textarea {
 .list-results li:nth-child(4n+1){
     clear: both;
 	}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Global                                    */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+*{
+	font-family: 'ClearSans', Helvetica, Arial, sans-serif !important;
+	margin: 0px;
+	padding: 0px;
+}
+
+*:before, *:after { 
+	box-sizing: inherit;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Default                                   */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+html{	
+	box-sizing: border-box; 
+    overflow-y: scroll;	
+	height: 100%;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Container                                 */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+#wrapper {
+    margin: 0px auto;
+    max-width: 980px;
+    padding: 80px 10px;
+    min-width: 620px;
+}
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Content                                   */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+h1.title{
+    text-transform: uppercase;
+    color: #222;
+    letter-spacing: 0.5em;
+    line-height: 30px;
+    margin-bottom: 50px;
+    font-weight: bold;
+    font-size: 45px;
+    text-align: center;
+}
+
+.search-box{
+    border: 1px solid #ccc;
+    background-color: #00adef;
+    height: 32px;
+    overflow: hidden;
+}
+
+.search-box .search-input{
+    display: inline-block;
+    width: 86%;
+    background-color: #fff;
+}
+
+.search-box .search-input input#search{
+    border: 0px;
+    padding: 8px 25px;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    width: 94%;
+    max-width: none;
+}
+
+.search-box .search-input input#search:focus {
+    outline-width: 0;
+}
+
+.search-box .search-button {
+    display: inline-block;
+    width: 14%;
+    background-color: #00adef;
+}
+
+.search-box .search-button button{
+    background-color: #00adef;
+    padding: 8px;
+    color: #ffffff;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    font-size: 12px;
+    border: 0px;
+    width: 100%;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    height: 31px;
+}
+
+.filters {
+    display: block;
+    margin: 45px auto;
+    max-width: 524px;
+}
+
+.filters label {
+    margin-right: 25px;
+}
+
+.filters label:last-child{
+    margin-right: 0px;
+}
+
+footer{
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+@media screen and (max-width: 920px) {
+    .search-box .search-input input#search {
+        width: 92%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .search-box .search-button button {
+        font-size: 10px;
+        height: 34px;
+    }
+}
+
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Fonts                                     */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+@font-face{
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face{
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-Italic.ttf');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face{
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-BoldiIalic.ttf');
+    font-weight: bold;
+    font-style: italic;
+}

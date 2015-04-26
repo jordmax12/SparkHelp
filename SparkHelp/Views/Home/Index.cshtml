@@ -6,95 +6,81 @@
 
 }
 
+<!-- SEARCH -->
+<h1 class="title">Spark Help</h1>
+<form class="navbar-form" role="search">
+    <div class="search-box">
+        <!--<div class="filter"><p>Filter</p></div><!--
+        --><div class="search-input"><input type="text" id="search" class="form-control" placeholder="search..." name="q"></div><!--
+        --><div class="search-button"><a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default">Search</button></a></div><!--
+        --></div>
+    <div class="filters">
+        @if ((Request.Params["MSDN"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["Stack"] == null)
+        {
+            <label>
+                <input type="checkbox" name="Stack" value="true" /> Stack Overflow
+            </label>
+        }
+        else
+        {
+            <label>
+                <input type="checkbox" name="Stack" value="true" checked="checked" /> Stack Overflow
+            </label>
+        }
+        @if ((Request.Params["Stack"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["MSDN"] == null)
+        {
+            <label>
+                <input type="checkbox" name="MSDN" value="true" /> MSDN
+            </label>
+        }
+        else
+        {
+            <label>
+                <input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
+            </label>
+        }
+        @if ((Request.Params["Stack"] != null || Request.Params["MSDN"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["W3"] == null)
+        {
+            <label>
+                <input type="checkbox" name="W3" value="true" /> W3
+            </label>
+        }
+        else
+        {
+            <label>
+                <input type="checkbox" name="W3" value="true" checked="checked" /> W3
+            </label>
+        }
 
-<link rel="stylesheet" type="text/css" href="Content/font-awesome.css"/>
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="Content/Site.css" />
-<div class="container">
-
-    <div class="text-center">
-        <h1>Spark Help</h1>
+        @if (Request.Params["CodeProject"] != null)
+        {
+            <label>
+                <input type="checkbox" name="CodeProject" value="true" checked="checked" /> CodeProject
+            </label>
+        }
+        else
+        {
+            <label>
+                <input type="checkbox" name="CodeProject" value="true" /> CodeProject
+            </label>
+        }
+        @if (Request.Params["Unity3D"] != null)
+        {
+            <label>
+                <input type="checkbox" name="Unity3D" value="true" checked="checked" /> Unity3D
+            </label>
+        }
+        else
+        {
+            <label>
+                <input type="checkbox" name="Unity3D" value="true" /> Unity3D
+            </label>
+        }
     </div>
-    <br/>
-    <br/>
-    <!-- Search Navbar - START -->
-    <button class="Button1" id="Button1"></button>
-    <div class="col-md-4 col-md-offset-4">
-        <form class="navbar-form" role="search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="q">
-                <div class="input-group-btn">
-                    
-                    <a href="@Url.Action("Index", "Home", new {queried = "true"})"><button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button></a>
-                </div>
+</form>
+<!-- SEARCH END -->
+<!-- Search Navbar - START -->
 
-            </div>
-
-            @if ((Request.Params["MSDN"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["Stack"] == null)
-            {
-                <label>
-                    <input type="checkbox" name="Stack" value="true" /> Stack Overflow
-                </label>
-            }
-            else
-            {
-                <label>
-                    <input type="checkbox" name="Stack" value="true" checked="checked" /> Stack Overflow
-                </label>
-            }
-            @if ((Request.Params["Stack"] != null || Request.Params["W3"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["MSDN"] == null)
-            {
-                <label>
-                    <input type="checkbox" name="MSDN" value="true"/> MSDN
-                </label>
-            }
-            else
-            {
-                <label>
-                    <input type="checkbox" name="MSDN" value="true" checked="checked" /> MSDN
-                </label>
-            }
-            @if ((Request.Params["Stack"] != null || Request.Params["MSDN"] != null || Request.Params["CodeProject"] != null || Request.Params["Unity3D"] != null) && Request.Params["W3"] == null)
-            {
-                <label>
-                    <input type="checkbox" name="W3" value="true" /> W3
-                </label>
-            }
-            else
-            {
-                <label>
-                    <input type="checkbox" name="W3" value="true" checked="checked" /> W3
-                </label>
-            }
-
-            @if (Request.Params["CodeProject"] != null)
-            {
-                <label>
-                    <input type="checkbox" name="CodeProject" value="true" checked="checked"/> CodeProject
-                </label>
-            }
-            else
-            {
-                <label>
-                    <input type="checkbox" name="CodeProject" value="true" /> CodeProject
-                </label>
-            }
-            @if (Request.Params["Unity3D"] != null)
-            {
-                <label><input type="checkbox" name="Unity3D" value="true" checked="checked"/> Unity3D
-                </label>
-            }
-            else
-            {
-                <label>
-                    <input type="checkbox" name="Unity3D" value="true" /> Unity3D
-                </label>
-            }
-        </form>
-    </div>
-    <br/>
-    <br/>
 
 <div class="col-md-12">
 
@@ -102,7 +88,7 @@
     {
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
         <br />
-        
+
     }
     <ul class="list-results">
         @{
@@ -122,10 +108,10 @@
                 {
                     string link = @item.stack.QuestionLink;
                     <li>
-                            @{
-                                var setTitleID = item.stack.QuestionID + "-qID";
-                                var setSumID = setTitleID + "-sum";
-                            }
+                        @{
+                    var setTitleID = item.stack.QuestionID + "-qID";
+                    var setSumID = setTitleID + "-sum";
+                        }
 
                         @if (item.stack.QuestionVote < 0)
                         {
@@ -139,8 +125,8 @@
                         {
                             <i class="fa fa-arrow-right" style="color: black;">&nbsp;@item.stack.QuestionVote</i>
                         }
-                        
-                       
+
+
                         <a href="@link" style="width: auto; height: 72px;">
                             <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
@@ -150,8 +136,8 @@
 
 
                     </li>
-                    index++;
-                    prevSOString = item.stack.QuestionTitle;
+                        index++;
+                        prevSOString = item.stack.QuestionTitle;
 
                 }
             }
@@ -160,171 +146,186 @@
 
     </ul>
 </div>
-    <div class="col-md-12">
-        <br/>
+<div class="col-md-12">
+    <br />
     @if (Request.Params["MSDN"] != null)
     {
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>
         <br />
-        
+
     }
-        <ul class="list-results">
-            @{
-                string prevString = "";
-                page = 0;
-                index2 = 0;
-            }
-            @foreach (var item in Model)
-            {
-
-
-                if (item.msdn != null)
-                {
-                    if (item.msdn.QueryTitle != prevString && index2 < 8 && item.msdn.QueryTitle != "null")
-                    {
-                        string link = @item.msdn.QueryURL;
-                        var setTitleID = item.msdn.QueryID + "-qID";
-                        var setSumID = setTitleID + "-sum";
-                        <li>
-                            <a href="http://@link" style="width: auto; height: 72px;">
-                                <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
-                            </a>
-
-                            <p class="msdn-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
-                        </li>
-                        index2++;
-                    }
-
-                    prevString = item.msdn.QueryTitle;
-                }
-            }
-        </ul>
-    </div>
-
-    <div class="col-md-12">
-        <br/>
-        @if (Request.Params["W3"] != null)
-        {
-            <h2 style="margin-left: auto; margin-right: auto; clear: both;">W3</h2>
-            <br />
-            
+    <ul class="list-results">
+        @{
+            string prevString = "";
+            page = 0;
+            index2 = 0;
         }
-        <ul class="list-results">
-            @{
-                string prevString4 = "";
-                page = 0;
-                index5 = 0;
-            }
-            @foreach (var item in Model)
-            {
-                if (item.w3 != null)
-                {
-                    if (item.w3.Title != prevString4 && index5 < 8 && item.w3.Title != "null")
-                    {
-                        var setTitleID = item.w3.ID + "-qID";
-                        var setSumID = setTitleID + "-sum";
-                        <li>
-                            <a href="@item.w3.Link" style="width: auto; height: 72px;">
-                                <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
-                            </a>
-                            <p class="w3-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
-                        </li>
-                        index5++;
-                    }
-                    prevString4 = item.w3.Title;
-                }
-
-            }
-
-        </ul>
-    </div>
-
-    <div class="col-md-12">
-        <br/>
-        @if (Request.Params["CodeProject"] != null)
+        @foreach (var item in Model)
         {
-            <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
-            <br/>
-            
-        }
-        <ul class="list-results">
-            @{
-                string prevString2 = "";
-                page = 0;
-                index3 = 0;
-            }
-            @foreach (var item in Model)
+
+
+            if (item.msdn != null)
             {
-                if (item.CP != null)
+                if (item.msdn.QueryTitle != prevString && index2 < 8 && item.msdn.QueryTitle != "null")
                 {
-                    if (item.CP.Title != prevString2 && index3 < 8 && item.CP.Title != "null")
-                    {
-                        float rating = (float)(Math.Truncate((float)@item.CP.Rating * 100.0) / 100.0);
-                        var setTitleID = item.CP.QuestionID + "-qID";
-                        var setSumID = setTitleID + "-sum";
-                        <li>
-                            <p>@rating / 5</p>
-                            <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
-                                <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
-                            </a>
-                            <p class="CP-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
-                        </li>
-                        index3++;
-                    }
+                    string link = @item.msdn.QueryURL;
+                    var setTitleID = item.msdn.QueryID + "-qID";
+                    var setSumID = setTitleID + "-sum";
+                    <li>
+                        <a href="http://@link" style="width: auto; height: 72px;">
+                            <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
+                        </a>
 
-                    prevString2 = item.CP.Title;
-                }
-            }
-
-        </ul>
-    </div>
-
-    <div class="col-md-12">
-        <br/>
-        @if (Request.Params["Unity3D"] != null)
-        {
-            <h2 style="margin-left: auto; margin-right: auto; clear: both;">Unity3D</h2>
-        }
-        <br/>
-        <ul class="list-results">
-
-            @{
-                string prevString3 = "";
-                page = 0;
-                index4 = 0;
-            }
-            @foreach (var item in Model)
-            {
-                if (item.unity != null)
-                {
-                    if (item.unity.Title != prevString3 && index4 < 8 && item.unity.Title != "null")
-                    {
-                        var setTitleID = item.unity.ID + "-qID";
-                        var setSumID = setTitleID + "-sum";
-                        <li>
-                            <a href="@item.unity.Link" style="width: auto; height: 72px;">
-                                <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
-                            </a>
-                            <p class="unity-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
-                        </li>
-                        index4++;
-                    }
-                    prevString3 = item.unity.Title;
+                        <p class="msdn-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
+                    </li>
+                    index2++;
                 }
 
+                prevString = item.msdn.QueryTitle;
             }
-
-        </ul>
-    </div>
-
-
-
-
-
-    <!-- Search Navbar - END -->
-
+        }
+    </ul>
 </div>
 
+<div class="col-md-12">
+    <br />
+    @if (Request.Params["W3"] != null)
+    {
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">W3</h2>
+        <br />
+
+    }
+    <ul class="list-results">
+        @{
+            string prevString4 = "";
+            page = 0;
+            index5 = 0;
+        }
+        @foreach (var item in Model)
+        {
+            if (item.w3 != null)
+            {
+                if (item.w3.Title != prevString4 && index5 < 8 && item.w3.Title != "null")
+                {
+                    var setTitleID = item.w3.ID + "-qID";
+                    var setSumID = setTitleID + "-sum";
+                    <li>
+                        <a href="@item.w3.Link" style="width: auto; height: 72px;">
+                            <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
+                        </a>
+                        <p class="w3-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
+                    </li>
+                    index5++;
+                }
+                prevString4 = item.w3.Title;
+            }
+
+        }
+
+    </ul>
+</div>
+
+<div class="col-md-12">
+    <br />
+    @if (Request.Params["CodeProject"] != null)
+    {
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
+        <br />
+
+    }
+    <ul class="list-results">
+        @{
+            string prevString2 = "";
+            page = 0;
+            index3 = 0;
+        }
+        @foreach (var item in Model)
+        {
+            if (item.CP != null)
+            {
+                if (item.CP.Title != prevString2 && index3 < 8 && item.CP.Title != "null")
+                {
+                    float rating = (float)(Math.Truncate((float)@item.CP.Rating * 100.0) / 100.0);
+                    var setTitleID = item.CP.QuestionID + "-qID";
+                    var setSumID = setTitleID + "-sum";
+                    <li>
+                        @if (rating >= 4)
+                        {
+                            <i class="fa fa-arrow-up" style="color: green;">
+                                <p>@rating / 5</p>
+                            </i>
+                        }
+                        else if (rating > 3.0 && rating < 4.0)
+                        {
+                            <i class="fa fa-arrow-right" style="color: black;">
+                                <p>@rating / 5</p>
+                            </i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-arrow-down" style="color: red;">
+                                <p>@rating / 5</p>
+                            </i>
+                        }
+
+                        <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
+                            <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
+                        </a>
+                        <p class="CP-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
+                    </li>
+                        index3++;
+                }
+
+                prevString2 = item.CP.Title;
+            }
+        }
+
+    </ul>
+</div>
+
+<div class="col-md-12">
+    <br />
+    @if (Request.Params["Unity3D"] != null)
+    {
+        <h2 style="margin-left: auto; margin-right: auto; clear: both;">Unity3D</h2>
+    }
+    <br />
+    <ul class="list-results">
+
+        @{
+            string prevString3 = "";
+            page = 0;
+            index4 = 0;
+        }
+        @foreach (var item in Model)
+        {
+            if (item.unity != null)
+            {
+                if (item.unity.Title != prevString3 && index4 < 8 && item.unity.Title != "null")
+                {
+                    var setTitleID = item.unity.ID + "-qID";
+                    var setSumID = setTitleID + "-sum";
+                    <li>
+                        <a href="@item.unity.Link" style="width: auto; height: 72px;">
+                            <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
+                        </a>
+                        <p class="unity-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
+                    </li>
+                    index4++;
+                }
+                prevString3 = item.unity.Title;
+            }
+
+        }
+
+    </ul>
+</div>
+
+
+
+
+
+<!-- Search Navbar - END -->
 @Scripts.Render("~/bundles/jquery")
 <script text="text~/javascript">
     $(document).ready(function () {
