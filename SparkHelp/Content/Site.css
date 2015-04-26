@@ -96,8 +96,8 @@ h1.title{
 }
 
 .search-box{
-    background-color: #00adef;
     overflow: hidden;
+    background-color: #058cc0;
 }
 
 .search-box .search-input{
@@ -124,30 +124,37 @@ h1.title{
     outline: none;
 }
 
-.search-box .search-button {
+.search-box .search-button{
     float: left;
     width: 15%;
     text-align: center;
 }
 
-.search-box .search-button a{
+.search-box .search-button .btn{
     background-color: #058cc0;
     padding: 8px;
-    color: #ffffff;
+    width: 100%;
+    outline: none;
+    border-radius: 0;
+    border: 0;
+    display: block;
+}
+
+.search-box .search-button .btn a {
+    text-decoration: none;
+    color: #fff;
     letter-spacing: 0.5em;
     text-transform: uppercase;
     font-size: 12px;
-    width: 100%;
     font-weight: bold;
     display: block;
-    text-decoration: none;
 }
 
-.search-box .search-button a:hover{
+.search-box .search-button .btn:hover{
     background-color: #00adef;
 }
 
-.search-box .search-button a:focus{
+.search-box .search-button .btn:focus{
     background-color: #056589;
 }
 
