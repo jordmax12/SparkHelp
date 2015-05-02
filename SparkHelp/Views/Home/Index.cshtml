@@ -121,7 +121,6 @@
                             <i class="fa fa-arrow-right" style="color: black;">&nbsp;@item.stack.QuestionVote</i>
                         }
 
-
                         <a href="@link">
                             <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
@@ -131,7 +130,6 @@
                                 <p class="stack-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
                             </div>
                         </div>
-
                     </li>
                         index++;
                         prevSOString = item.stack.QuestionTitle;
@@ -168,11 +166,15 @@
                     var setTitleID = item.msdn.QueryID + "-qID";
                     var setSumID = setTitleID + "-sum";
                     <li>
-                        <a href="http://@link" style="width: auto; height: 72px;">
+                        <a href="http://@link">
                             <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                         </a>
 
-                        <p class="msdn-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
+                         <div class="overlay">
+                            <div class="content-summary">
+                                <p class="msdn-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
+                            </div>
+                        </div>
                     </li>
                     index2++;
                 }
@@ -206,10 +208,15 @@
                     var setTitleID = item.w3.ID + "-qID";
                     var setSumID = setTitleID + "-sum";
                     <li>
-                        <a href="@item.w3.Link" style="width: auto; height: 72px;">
+                        <a href="@item.w3.Link">
                             <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
                         </a>
-                        <p class="w3-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
+
+                        <div class="overlay">
+                            <div class="content-summary">
+                                <p class="w3-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
+                            </div>
+                        </div>
                     </li>
                     index5++;
                 }
@@ -264,10 +271,14 @@
                             </i>
                         }
 
-                        <a href="http://@item.CP.Link" style="width: auto; height: 72px;">
+                        <a href="http://@item.CP.Link">
                             <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                         </a>
-                        <p class="CP-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
+                        <div class="overlay">
+                            <div class="content-summary">
+                                <p class="CP-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
+                            </div>
+                        </div>
                     </li>
                         index3++;
                 }
@@ -302,10 +313,14 @@
                     var setTitleID = item.unity.ID + "-qID";
                     var setSumID = setTitleID + "-sum";
                     <li>
-                        <a href="@item.unity.Link" style="width: auto; height: 72px;">
+                        <a href="@item.unity.Link">
                             <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
                         </a>
-                        <p class="unity-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
+                        <div class="overlay">
+                            <div class="content-summary">
+                                <p class="unity-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
+                            </div>
+                        </div>
                     </li>
                     index4++;
                 }

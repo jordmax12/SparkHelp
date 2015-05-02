@@ -64,6 +64,10 @@ body {
     min-width: 620px;
 }
 
+footer {
+    margin-bottom: 15px;
+}
+
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 /* Content                                   */
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
@@ -198,7 +202,7 @@ footer{
 .list-results li:before{
     content: '';
     display: inline-block;
-    height: 20%;
+    height: 17%;
     vertical-align: middle;  
 }
 
