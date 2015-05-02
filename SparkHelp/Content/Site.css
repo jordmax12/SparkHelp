@@ -178,7 +178,8 @@ footer{
     padding: 8px 0px;
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    box-sizing: border-box; 
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: relative;
 }
 
@@ -194,6 +195,10 @@ footer{
     clear: both;
 }
 
+.list-results li a{
+    line-height: 38px;
+}
+
 .list-results li .overlay{
     position: absolute;
     top: 0;
@@ -204,7 +209,6 @@ footer{
     background-color: rgba(0, 0 ,0 , 0.9);
     -webkit-transition: opacity .15s linear;
     transition: opacity .15s linear;
-    -webkit-transform: translate3d(0,0,0);
 }
 
 .list-results li .overlay:hover{
@@ -214,7 +218,7 @@ footer{
 .list-results li .overlay:before{
     content: '';
     display: inline-block;
-    height: 100%;
+    height: 20%;
     vertical-align: middle;  
 }
 
@@ -228,4 +232,8 @@ footer{
     text-align: center;
     padding: 0 15px;
     color: #fff; 
+}
+
+.list-results li .overlay .content-summary p{
+    font-size: 11px;
 }
