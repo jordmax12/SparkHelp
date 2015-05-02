@@ -179,6 +179,7 @@ footer{
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     box-sizing: border-box; 
+    position: relative;
 }
 
 .list-results li:nth-of-type(4n+4) {
