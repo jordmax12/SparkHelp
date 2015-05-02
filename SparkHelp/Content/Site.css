@@ -177,7 +177,7 @@ footer{
     float: left;
     overflow: hidden;
     width: 25%;
-    height: 150px;
+    min-height: 172px;
     text-align: center;
     padding: 8px 0px;
     border-left: 1px solid #ccc;
@@ -208,17 +208,8 @@ footer{
     display: inline-block
 }
 
-
-.list-results li a:before{
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;  
-}
-
 .list-results li a .inner-content {
     display: inline-block;
-    vertical-align: middle;
 }
 
 .list-results li a h4{
