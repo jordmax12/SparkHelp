@@ -195,8 +195,27 @@ footer{
     clear: both;
 }
 
+.list-results li:before{
+    content: '';
+    display: inline-block;
+    height: 20%;
+    vertical-align: middle;  
+}
+
 .list-results li a{
-    line-height: 38px;
+    line-height: 32px;
+    display: inline-block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.list-results li a h4{
+    line-height: 22px;
+    font-size: 15px;
+    padding: 10px;
 }
 
 .list-results li .overlay{
