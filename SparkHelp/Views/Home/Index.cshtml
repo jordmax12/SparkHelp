@@ -167,14 +167,15 @@
                     var setSumID = setTitleID + "-sum";
                     <li>
                         <a href="http://@link">
-                            <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
-                        </a>
-
-                         <div class="overlay">
-                            <div class="content-summary">
-                                <p class="msdn-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
+                            <div class="inner-content">
+                                <h4 class="msdn-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.msdn.QueryTitle)</h4>
                             </div>
-                        </div>
+                            <div class="overlay">
+                                <div class="content-summary">
+                                    <p class="msdn-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.msdn.QueryDescription)</p>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                     index2++;
                 }
@@ -209,14 +210,15 @@
                     var setSumID = setTitleID + "-sum";
                     <li>
                         <a href="@item.w3.Link">
-                            <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
-                        </a>
-
-                        <div class="overlay">
-                            <div class="content-summary">
-                                <p class="w3-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
+                            <div class="inner-content">
+                                <h4 class="w3-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.w3.Title)</h4>
                             </div>
-                        </div>
+                            <div class="overlay">
+                                <div class="content-summary">
+                                    <p class="w3-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.w3.Snippet)</p>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                     index5++;
                 }
@@ -252,33 +254,34 @@
                     var setTitleID = item.CP.QuestionID + "-qID";
                     var setSumID = setTitleID + "-sum";
                     <li>
-                        @if (rating >= 4)
-                        {
-                            <i class="fa fa-arrow-up" style="color: green;">
-                                <p>@rating / 5</p>
-                            </i>
-                        }
-                        else if (rating > 3.0 && rating < 4.0)
-                        {
-                            <i class="fa fa-arrow-right" style="color: black;">
-                                <p>@rating / 5</p>
-                            </i>
-                        }
-                        else
-                        {
-                            <i class="fa fa-arrow-down" style="color: red;">
-                                <p>@rating / 5</p>
-                            </i>
-                        }
-
                         <a href="http://@item.CP.Link">
-                            <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
-                        </a>
-                        <div class="overlay">
-                            <div class="content-summary">
-                                <p class="CP-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
+                            <div class="inner-content">
+                                @if (rating >= 4)
+                                {
+                                    <i class="fa fa-arrow-up" style="color: green;">
+                                        <p>@rating / 5</p>
+                                    </i>
+                                }
+                                else if (rating > 3.0 && rating < 4.0)
+                                {
+                                    <i class="fa fa-arrow-right" style="color: black;">
+                                        <p>@rating / 5</p>
+                                    </i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-down" style="color: red;">
+                                        <p>@rating / 5</p>
+                                    </i>
+                                }
+                                <h4 class="CP-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.CP.Title)</h4>
                             </div>
-                        </div>
+                            <div class="overlay">
+                                <div class="content-summary">
+                                    <p class="CP-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.CP.Summary)</p>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                         index3++;
                 }
@@ -314,13 +317,15 @@
                     var setSumID = setTitleID + "-sum";
                     <li>
                         <a href="@item.unity.Link">
-                            <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
-                        </a>
-                        <div class="overlay">
-                            <div class="content-summary">
-                                <p class="unity-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
+                            <div class="inner-content">
+                                <h4 class="unity-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.unity.Title)</h4>
                             </div>
-                        </div>
+                            <div class="overlay">
+                                <div class="content-summary">
+                                    <p class="unity-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.unity.Snippet)</p>
+                                </div>
+                            </div>
+                        </a>
                     </li>
                     index4++;
                 }
