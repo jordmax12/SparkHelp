@@ -124,13 +124,12 @@
                                 }
                                 <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                             </div>
-                        </a>
-
-                        <div class="overlay">
-                            <div class="content-summary">
-                                <p class="stack-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
+                            <div class="overlay">
+                                <div class="content-summary">
+                                    <p class="stack-summary" id="@setSumID">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </li>
                         index++;
                         prevSOString = item.stack.QuestionTitle;
