@@ -87,17 +87,15 @@
     {
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
         <br />
-
-    }
     <ul class="list-results">
         @{
-            int page = 0;
-            int index = 0;
-            int index2 = 0;
-            int index3 = 0;
-            int index4 = 0;
-            int index5 = 0;
-            string prevSOString = "";
+        int page = 0;
+        int index = 0;
+        int index2 = 0;
+        int index3 = 0;
+        int index4 = 0;
+        int index5 = 0;
+        string prevSOString = "";
         }
         @foreach (var item in Model)
         {
@@ -144,6 +142,8 @@
         }
 
     </ul>
+    }
+    
 </div>
 <div class="col-md-12">
     <br />
