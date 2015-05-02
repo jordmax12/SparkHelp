@@ -218,7 +218,7 @@ footer{
     vertical-align: middle;  
 }
 
-.list-results li .overlay p{
+.list-results li .overlay .content-summary{
     display: inline-block;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
