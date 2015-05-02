@@ -177,7 +177,7 @@ footer{
     float: left;
     overflow: hidden;
     width: 25%;
-    min-height: 150px;
+    height: 170px;
     text-align: center;
     padding: 8px 0px;
     border-left: 1px solid #ccc;
