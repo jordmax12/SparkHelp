@@ -20,22 +20,6 @@ textarea {
     max-width: 280px;
 }
 
-.list-results{
-    list-style-type: none;
-}
-
-.list-results li{
-    float: left;
-    overflow: hidden;
-    width: 24%;
-    text-align: center;
-    padding: 8px 0px;
-    border: 1px solid black;
-}
-
-.list-results li:nth-child(4n+1){
-    clear: both;
-	}
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 /* Global                                    */
@@ -176,16 +160,37 @@ footer{
     text-align: center;
     letter-spacing: 0.1em;
 }
-/*
-@media screen and (max-width: 920px) {
-    .search-box .search-input input#search {
-        width: 92%;
-    }
+
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* Results                                   */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+.list-results{
+    list-style-type: none;
 }
 
-@media screen and (max-width: 700px) {
-    .search-box .search-button button {
-        font-size: 10px;
-        height: 34px;
-    }
-}*/
+.list-results li{
+    float: left;
+    overflow: hidden;
+    width: 25%;
+    height: 150px;
+    text-align: center;
+    padding: 8px 0px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    box-sizing: border-box; 
+    line-height: 40px;
+}
+
+.list-results li:nth-of-type(4n+4) {
+  border-right: 2px solid #ccc;
+}
+
+.list-results li:nth-of-type(-n+4) {
+  border-top: 2px solid #ccc;
+}
+
+.list-results li:nth-child(4n+1){
+    clear: both;
+}
+

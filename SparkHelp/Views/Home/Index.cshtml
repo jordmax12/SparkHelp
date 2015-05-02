@@ -78,16 +78,12 @@
     </div>
 </form>
 <!-- SEARCH END -->
-<!-- Search Navbar - START -->
-
-
+<!-- RESULTS -->
 <div class="col-md-12">
-
     @if (Request.Params["Stack"] != null)
     {
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">Stack Overflow</h2>
         <br />
-
     }
     <ul class="list-results">
         @{
@@ -142,7 +138,6 @@
             }
 
         }
-
     </ul>
 </div>
 <div class="col-md-12">
