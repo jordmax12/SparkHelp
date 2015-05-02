@@ -109,19 +109,21 @@
                         }
 
                         <a href="@link">
-                            @if (item.stack.QuestionVote < 0)
-                            {
-                                <i class="fa fa-arrow-down" style="color: red;">&nbsp;@item.stack.QuestionVote</i>
-                            }
-                            else if (item.stack.QuestionVote > 0)
-                            {
-                                <i class="fa fa-arrow-up" style="color: green;">&nbsp;@item.stack.QuestionVote</i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-arrow-right" style="color: black;">&nbsp;@item.stack.QuestionVote</i>
-                            }
-                            <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
+                            <div class="inner-content">
+                                @if (item.stack.QuestionVote < 0)
+                                {
+                                    <i class="fa fa-arrow-down" style="color: red;">&nbsp;@item.stack.QuestionVote</i>
+                                }
+                                else if (item.stack.QuestionVote > 0)
+                                {
+                                    <i class="fa fa-arrow-up" style="color: green;">&nbsp;@item.stack.QuestionVote</i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-arrow-right" style="color: black;">&nbsp;@item.stack.QuestionVote</i>
+                                }
+                                <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
+                            </div>
                         </a>
 
                         <div class="overlay">
