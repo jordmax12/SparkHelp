@@ -141,9 +141,9 @@
     </ul>
 </div>
 <div class="col-md-12">
-    <br />
     @if (Request.Params["MSDN"] != null)
     {
+        <br />
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">MSDN</h2>
         <br />
 
@@ -186,9 +186,9 @@
 </div>
 
 <div class="col-md-12">
-    <br />
     @if (Request.Params["W3"] != null)
     {
+        <br />
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">W3</h2>
         <br />
 
@@ -229,9 +229,9 @@
 </div>
 
 <div class="col-md-12">
-    <br />
     @if (Request.Params["CodeProject"] != null)
     {
+        <br />
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">CodeProject</h2>
         <br />
 
@@ -291,12 +291,12 @@
 </div>
 
 <div class="col-md-12">
-    <br />
     @if (Request.Params["Unity3D"] != null)
     {
+        <br />
         <h2 style="margin-left: auto; margin-right: auto; clear: both;">Unity3D</h2>
+        <br />
     }
-    <br />
     <ul class="list-results">
 
         @{
@@ -331,12 +331,7 @@
 
     </ul>
 </div>
-
-
-
-
-
-<!-- Search Navbar - END -->
+<!-- RESULTS END -->
 @Scripts.Render("~/bundles/jquery")
 <script text="text~/javascript">
     $(document).ready(function () {
