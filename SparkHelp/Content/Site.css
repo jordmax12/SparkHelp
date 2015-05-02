@@ -183,11 +183,11 @@ footer{
 }
 
 .list-results li:nth-of-type(4n+4) {
-  border-right: 2px solid #ccc;
+  border-right: 1px solid #ccc;
 }
 
 .list-results li:nth-of-type(-n+4) {
-  border-top: 2px solid #ccc;
+  border-top: 1px solid #ccc;
 }
 
 .list-results li:nth-child(4n+1){
