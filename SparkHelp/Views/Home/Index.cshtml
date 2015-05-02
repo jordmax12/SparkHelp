@@ -126,9 +126,9 @@
                             <h4 class="stack-title" id="@setTitleID">@Html.DisplayFor(modelItem => item.stack.QuestionTitle)</h4>
                         </a>
 
-
-                        <p class="stack-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
-
+                        <div class="overlay">
+                            <p class="stack-summary" id="@setSumID" style="display: none;">@Html.DisplayFor(modelItem => item.stack.QuestionText)</p>
+                        </div>
 
                     </li>
                         index++;
